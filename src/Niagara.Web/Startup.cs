@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using Niagara.Data.Common.RepositoryInterfaces;
+using Niagara.Data.InMemory.Repositories;
+using Niagara.Domain.Services;
+using Niagara.Domain.Services.Interfaces;
 
 namespace Niagara.Web
 {
@@ -27,6 +32,14 @@ namespace Niagara.Web
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Niagara Web API", Version = "v1" });
+            });
+
+            services.AddScoped<IMaterialLogRepository, MaterialLogInMemoryRepository>();
+            services.AddScoped<IMaterialLogService, MaterialLogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,10 +56,17 @@ namespace Niagara.Web
                 app.UseHsts();
             }
 
-            if (!env.IsDevelopment())
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
             {
-                app.UseHttpsRedirection();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Niagara Web API v1");
+            });
+
+            app.UseHttpsRedirection();
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

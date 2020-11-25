@@ -15,6 +15,7 @@ namespace Niagara.Domain.Mapping
             {
                 LotNumber = entity.Id,
                 Description = entity.Description,
+                Quantity = entity.Quantity,
                 DateCreated = entity.DateCreated.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture),
                 DateUpdated = entity.DateUpdated?.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture)
             };
@@ -25,6 +26,7 @@ namespace Niagara.Domain.Mapping
             if (entity != null && model != null)
             {
                 entity.Description = model.Description;
+                entity.Quantity = model.Quantity;
             }
         }
     }

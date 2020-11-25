@@ -22,6 +22,12 @@ const routes = [
     path: '/material-logs',
     name: 'MaterialLogsList',
     component: () => import('../views/MaterialLogsList.vue')
+  },
+  {
+    path: '/material-log/:lotNumber',
+    name: 'MaterialLog',
+    component: () => import('../views/MaterialLog.vue'),
+    props: true
   }
 ]
 

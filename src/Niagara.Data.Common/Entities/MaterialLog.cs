@@ -9,6 +9,8 @@ namespace Niagara.Data.Common.Entities
 
         public string Description { get; set; }
 
+        public int Quantity { get; set; }
+
         public DateTime DateCreated { get; set; }
 
         public DateTime? DateUpdated { get; set; }

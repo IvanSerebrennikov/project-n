@@ -1,6 +1,5 @@
 <template>
   <div class="material-logs-list">
-    Material Logs
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -15,7 +14,9 @@
               Date Created
             </th>
             <th class="text-left">
-              Date Updated
+              Quantity
+            </th>
+            <th>
             </th>
           </tr>
         </thead>
@@ -31,7 +32,20 @@
               {{ materialLog.dateCreated }}
             </td>
             <td>
-              {{ materialLog.dateUpdated }}
+              {{ materialLog.quantity }}
+            </td>
+            <td>
+              <router-link :to="{ name: 'MaterialLog', params: { lotNumber: materialLog.lotNumber }}">
+                <v-btn
+                  tile
+                  color="primary"
+                >
+                  <v-icon left>
+                    mdi-pencil
+                  </v-icon>
+                  Edit
+                </v-btn>
+              </router-link>
             </td>
           </tr>
         </tbody>

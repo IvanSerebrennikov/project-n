@@ -25,7 +25,7 @@
                 </v-col>
                 <v-col>
                   <v-text-field
-                    label="DFARS"
+                    label="Type"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -37,7 +37,7 @@
                 </v-col>
                 <v-col>
                   <v-text-field
-                    label="Type"
+                    label="DFARS"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -285,12 +285,16 @@ export default {
   props: ['lotNumber'],
   data: function() {
     return {
+      materialLog: {},
       magnetOptions: ['Yes', 'No'],
       selectedMagnetOption: 'Yes' // temp
     }
   },
   mounted: function() {
     console.log(this.lotNumber);
+    this.axios.get(`/api/MaterialLog/${this.lotNumber}`).then((response) => {
+      this.materialLog = response.data;
+    });
   },
   computed: {
     isMagnet: function() {

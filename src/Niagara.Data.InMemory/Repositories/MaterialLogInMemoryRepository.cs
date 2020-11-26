@@ -1,22 +1,28 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Niagara.Data.Common.Entities;
+using Niagara.Data.Common.Projections;
 using Niagara.Data.Common.RepositoryInterfaces;
+using Niagara.Data.InMemory.InMemoryStorage.Providers;
 using Niagara.Data.InMemory.Repositories.Base;
 
 namespace Niagara.Data.InMemory.Repositories
 {
     public class MaterialLogInMemoryRepository : GenericInMemoryRepository<MaterialLog, string>, IMaterialLogRepository
     {
-        public MaterialLogInMemoryRepository()
+        public MaterialLogInMemoryRepository(MaterialLogInMemoryProvider inMemoryProvider) : base(inMemoryProvider)
         {
-            SetEntitiesSource(InMemoryStorage.MaterialLogs);
         }
 
-        public override void Create(MaterialLog entity)
+        public IReadOnlyList<MaterialLogProjection> GetAllReduced()
         {
-            entity.Id = $"ML{new Random().Next(1000, 9999)}";
-
-            base.Create(entity);
+            return Provider.Entities.Select(x => new MaterialLogProjection
+            {
+                Id = x.Id,
+                Description = x.Description,
+                Quantity = x.Quantity,
+                DateCreated = x.DateCreated
+            }).ToList();
         }
     }
 }

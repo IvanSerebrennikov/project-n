@@ -28,11 +28,17 @@ namespace Niagara.Domain.Services
             return _repository.GetAll().Select(x => x.ToModel()).ToList();
         }
 
+        public IReadOnlyList<MaterialLogReducedModel> GetAllReduced()
+        {
+            return _repository.GetAllReduced().Select(x => x.ToReducedModel()).ToList();
+        }
+
         public MaterialLogModel Create(MaterialLogModel model)
         {
             var entity = new MaterialLog();
 
             entity.MapFromModel(model);
+            entity.CreatedBy = "LoggedIn User";
             entity.DateCreated = DateTime.Now.Date;
 
             _repository.Create(entity);
@@ -42,7 +48,7 @@ namespace Niagara.Domain.Services
 
         public MaterialLogModel Update(MaterialLogModel model)
         {
-            var entity = _repository.GetById(model.LotNumber);
+            var entity = _repository.GetById(model.DefaultProperties.LotNumber);
 
             if (entity == null)
                 return null;

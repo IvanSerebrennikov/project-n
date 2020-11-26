@@ -1,6 +1,5 @@
 ﻿using System;
 using Niagara.Data.Common.Entities.Base;
-using Niagara.Data.Common.StaticOptions;
 
 namespace Niagara.Data.Common.Entities
 {
@@ -8,35 +7,35 @@ namespace Niagara.Data.Common.Entities
     {
         public string Id { get; set; }
 
-        public YesOrNoEnum Magnet { get; set; }
+        public bool IsMagnet { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Magnet Properties - BHmax. In MGOe.
+        ///     If <see cref="IsMagnet" /> true. Magnetic Properties - BHmax. In MGOe.
         /// </summary>
         public string BHmax { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Magnet Properties - Br. In kG.
+        ///     If <see cref="IsMagnet" /> "true". Magnetic Properties - Br. In kG.
         /// </summary>
         public string Br { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Magnet Properties - Hci. In kOe.
+        ///     If <see cref="IsMagnet" /> true. Magnetic Properties - Hci. In kOe.
         /// </summary>
         public string Hci { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Magnet Properties - Hc. In kOe.
+        ///     If <see cref="IsMagnet" /> true. Magnetic Properties - Hc. In kOe.
         /// </summary>
         public string Hc { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". Specifications - Material Complies to.
+        ///     If <see cref="IsMagnet" /> false. Specifications - Material Complies to.
         /// </summary>
         public string MaterialCompliesTo { get; set; }
 
         /// <summary>
-        /// PO #
+        ///     PO #
         /// </summary>
         public string PONumber { get; set; }
 
@@ -45,90 +44,90 @@ namespace Niagara.Data.Common.Entities
         public int Quantity { get; set; }
 
         /// <summary>
-        /// U/M. Id of <see cref="UnitOfMeasure"/>. 
+        ///     U/M. Id of <see cref="UnitOfMeasure" />.
         /// </summary>
         public int UnitOfMeasureId { get; set; }
 
         /// <summary>
-        /// Part #. Id of <see cref="PartNumber"/>. 
+        ///     Part #. Id of <see cref="PartNumber" />.
         /// </summary>
         public int PartNumberId { get; set; }
 
-        public YesOrNoEnum Available { get; set; }
+        public bool IsAvailable { get; set; }
 
         /// <summary>
-        /// Supplier. Id of <see cref="Supplier"/>. 
+        ///     Supplier. Id of <see cref="Supplier" />.
         /// </summary>
         public int SupplierId { get; set; }
 
-        public YesOrNoEnum DFARS { get; set; }
+        public bool IsDFARS { get; set; }
 
         public string PrimaryLocation { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Dimensions - Shape. Id of <see cref="Shape"/>. 
+        ///     If <see cref="IsMagnet" /> true. Dimensions - Shape. Id of <see cref="Shape" />.
         /// </summary>
         public int? ShapeId { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Dimensions - Dim1.
+        ///     If <see cref="IsMagnet" /> true. Dimensions - Dim1.
         /// </summary>
         public float? Dim1 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Dimensions - Dim2.
+        ///     If <see cref="IsMagnet" /> true. Dimensions - Dim2.
         /// </summary>
         public float? Dim2 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "Yes". Dimensions - DimLm.
+        ///     If <see cref="IsMagnet" /> true. Dimensions - DimLm.
         /// </summary>
         public float? DimLm { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". Bars 1.
+        ///     If <see cref="IsMagnet" /> false. Bars 1.
         /// </summary>
         public int? Bars1 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". Bars 2.
+        ///     If <see cref="IsMagnet" /> false. Bars 2.
         /// </summary>
         public int? Bars2 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". Bars 3.
+        ///     If <see cref="IsMagnet" /> false. Bars 3.
         /// </summary>
         public int? Bars3 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". FT 1.
+        ///     If <see cref="IsMagnet" /> false. FT 1.
         /// </summary>
         public int? FT1 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". FT 2.
+        ///     If <see cref="IsMagnet" /> false. FT 2.
         /// </summary>
         public int? FT2 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". FT 3.
+        ///     If <see cref="IsMagnet" /> false. FT 3.
         /// </summary>
         public int? FT3 { get; set; }
 
         /// <summary>
-        /// If <see cref="Magnet"/> "No". Total FT.
+        ///     If <see cref="IsMagnet" /> false. Total FT.
         /// </summary>
         public int? TotalFT { get; set; }
 
         /// <summary>
-        /// Type. Id of <see cref="MaterialLogType"/>. 
+        ///     Type. Id of <see cref="MaterialLogType" />.
         /// </summary>
         public int MaterialLogTypeId { get; set; }
 
         public string SupplierMaterialGrade { get; set; }
 
         /// <summary>
-        /// MRT #
+        ///     MRT #
         /// </summary>
         public int MRTNumber { get; set; }
 

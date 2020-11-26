@@ -41,9 +41,9 @@
                   color="primary"
                 >
                   <v-icon left>
-                    mdi-pencil
+                    mdi-open-in-app
                   </v-icon>
-                  Edit
+                  Open
                 </v-btn>
               </router-link>
             </td>

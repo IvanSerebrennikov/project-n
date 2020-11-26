@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Niagara.Data.Common.RepositoryInterfaces;
+using Niagara.Data.InMemory.InMemoryStorage;
+using Niagara.Data.InMemory.InMemoryStorage.Providers;
 using Niagara.Data.InMemory.Repositories;
 using Niagara.Domain.Services;
 using Niagara.Domain.Services.Interfaces;
@@ -38,12 +40,27 @@ namespace Niagara.Web
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Niagara Web API", Version = "v1" });
             });
 
+            services.AddSingleton<MaterialLogInMemoryProvider>();
+            services.AddSingleton<MaterialLogTypeInMemoryProvider>();
+            services.AddSingleton<PartNumberInMemoryProvider>();
+            services.AddSingleton<ShapeInMemoryProvider>();
+            services.AddSingleton<SupplierInMemoryProvider>();
+            services.AddSingleton<UnitOfMeasureInMemoryProvider>();
+
+            services.AddSingleton<InMemoryDataGenerator>();
+
             services.AddScoped<IMaterialLogRepository, MaterialLogInMemoryRepository>();
+            services.AddScoped<IMaterialLogTypeRepository, MaterialLogTypeInMemoryRepository>();
+            services.AddScoped<IPartNumberRepository, PartNumberInMemoryRepository>();
+            services.AddScoped<IShapeRepository, ShapeInMemoryRepository>();
+            services.AddScoped<ISupplierRepository, SupplierInMemoryRepository>();
+            services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureInMemoryRepository>();
+
             services.AddScoped<IMaterialLogService, MaterialLogService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, InMemoryDataGenerator inMemoryDataGenerator)
         {
             if (env.IsDevelopment())
             {
@@ -89,6 +106,8 @@ namespace Niagara.Web
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:8080"); // Vue app port
                 }
             });
+
+            inMemoryDataGenerator.Generate();
         }
     }
 }

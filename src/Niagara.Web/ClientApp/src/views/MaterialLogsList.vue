@@ -63,7 +63,7 @@ export default {
     };
   },
   mounted: function() {
-    this.axios.get('/api/MaterialLog').then((response) => {
+    this.axios.get('/api/MaterialLog/all').then((response) => {
       this.materialLogs = response.data;
     });
   }

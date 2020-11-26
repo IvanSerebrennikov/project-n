@@ -57,6 +57,7 @@ namespace Niagara.Web
             services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureInMemoryRepository>();
 
             services.AddScoped<IMaterialLogService, MaterialLogService>();
+            services.AddScoped<ISelectableOptionService, SelectableOptionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

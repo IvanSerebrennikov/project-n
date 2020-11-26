@@ -13,19 +13,21 @@ namespace Niagara.Web.Controllers
     public class MaterialLogController : ControllerBase
     {
         private readonly IMaterialLogService _materialLogService;
+        private readonly ISelectableOptionService _selectableOptionService;
 
-        public MaterialLogController(IMaterialLogService materialLogService)
+        public MaterialLogController(IMaterialLogService materialLogService, ISelectableOptionService selectableOptionService)
         {
             _materialLogService = materialLogService;
+            _selectableOptionService = selectableOptionService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public IEnumerable<MaterialLogReducedModel> GetAll()
         {
             return _materialLogService.GetAllReduced();
         }
 
-        [HttpGet("{lotNumber}")]
+        [HttpGet("single/{lotNumber}")]
         public IActionResult Get(string lotNumber)
         {
             var materialLogModel = _materialLogService.GetByLotNumber(lotNumber);
@@ -35,7 +37,22 @@ namespace Niagara.Web.Controllers
                 return BadRequest("Material Log was not found.");
             }
 
-            return Ok(materialLogModel);;
+            return Ok(materialLogModel);
+        }
+
+        [HttpGet("selectableOptions")]
+        public IActionResult GetSelectableOptions()
+        {
+            var unitOfMeasures = _selectableOptionService.GetUnitOfMeasures();
+            var partNumbers = _selectableOptionService.GetPartNumbers();
+            var suppliers = _selectableOptionService.GetSuppliers();
+            var shapes = _selectableOptionService.GetShapes();
+            var materialLogTypes = _selectableOptionService.GetMaterialLogTypes();
+
+            return Ok(new
+            {
+                unitOfMeasures, partNumbers, suppliers, shapes, materialLogTypes
+            });
         }
 
         [HttpPost]

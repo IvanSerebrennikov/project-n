@@ -292,8 +292,14 @@ export default {
   },
   mounted: function() {
     console.log(this.lotNumber);
-    this.axios.get(`/api/MaterialLog/${this.lotNumber}`).then((response) => {
+
+    this.axios.get(`/api/MaterialLog/single/${this.lotNumber}`).then((response) => {
+      console.log(response.data);
       this.materialLog = response.data;
+    });
+
+    this.axios.get(`/api/MaterialLog/selectableOptions`).then((response) => {
+      console.log(response.data);
     });
   },
   computed: {

@@ -93,22 +93,22 @@
         /// <summary>
         ///     Magnetic Properties - BHmax. In MGOe.
         /// </summary>
-        public string BHmax { get; set; }
+        public float? BHmax { get; set; }
 
         /// <summary>
         ///     Magnetic Properties - Br. In kG.
         /// </summary>
-        public string Br { get; set; }
+        public float? Br { get; set; }
 
         /// <summary>
         ///     Magnetic Properties - Hci. In kOe.
         /// </summary>
-        public string Hci { get; set; }
+        public float? Hci { get; set; }
 
         /// <summary>
         ///     Magnetic Properties - Hc. In kOe.
         /// </summary>
-        public string Hc { get; set; }
+        public float? Hc { get; set; }
     }
 
     public class MaterialLogDimensionsModel

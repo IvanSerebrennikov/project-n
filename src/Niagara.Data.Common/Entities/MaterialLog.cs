@@ -12,22 +12,22 @@ namespace Niagara.Data.Common.Entities
         /// <summary>
         ///     If <see cref="IsMagnet" /> true. Magnetic Properties - BHmax. In MGOe.
         /// </summary>
-        public string BHmax { get; set; }
+        public float? BHmax { get; set; }
 
         /// <summary>
         ///     If <see cref="IsMagnet" /> "true". Magnetic Properties - Br. In kG.
         /// </summary>
-        public string Br { get; set; }
+        public float? Br { get; set; }
 
         /// <summary>
         ///     If <see cref="IsMagnet" /> true. Magnetic Properties - Hci. In kOe.
         /// </summary>
-        public string Hci { get; set; }
+        public float? Hci { get; set; }
 
         /// <summary>
         ///     If <see cref="IsMagnet" /> true. Magnetic Properties - Hc. In kOe.
         /// </summary>
-        public string Hc { get; set; }
+        public float? Hc { get; set; }
 
         /// <summary>
         ///     If <see cref="IsMagnet" /> false. Specifications - Material Complies to.

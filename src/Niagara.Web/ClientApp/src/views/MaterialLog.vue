@@ -211,6 +211,7 @@
                             <v-text-field
                               label="BHmax"
                               suffix="MGOe"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.magneticProperties.bHmax"
                             ></v-text-field>
@@ -219,6 +220,7 @@
                             <v-text-field
                               label="Hci"
                               suffix="kOe"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.magneticProperties.hci"
                             ></v-text-field>
@@ -229,6 +231,7 @@
                             <v-text-field
                               label="Br"
                               suffix="kG"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.magneticProperties.br"
                             ></v-text-field>
@@ -237,6 +240,7 @@
                             <v-text-field
                               label="Hc"
                               suffix="kOe"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.magneticProperties.hc"
                             ></v-text-field>

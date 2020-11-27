@@ -9,61 +9,89 @@
                 <v-col>
                   <v-text-field
                     label="Lot #"
+                    v-model="materialLog.defaultProperties.lotNumber"
                   ></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field
+                  <v-combobox
+                    v-model="partNumber"
+                    :items="partNumberOptions"
+                    :search-input.sync="partNumberSearch"
                     label="Part #"
-                  ></v-text-field>
+                  >
+                    <template v-slot:no-data>
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            No results matching "<strong>{{ partNumberSearch }}</strong>". Press <kbd>enter</kbd> to create a new one.
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
+                  </v-combobox>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
                   <v-text-field
                     label="PO #"
+                    v-model="materialLog.defaultProperties.poNumber"
                   ></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field
+                  <v-select
+                    v-model="materialLog.defaultProperties.materialLogTypeId"
+                    :items="selectableOptions.materialLogTypes"
+                    item-text="value"
+                    item-value="id"
                     label="Type"
-                  ></v-text-field>
+                  ></v-select>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <v-text-field
+                  <v-checkbox
                     label="Available"
-                  ></v-text-field>
+                    v-model="materialLog.defaultProperties.isAvailable"
+                  ></v-checkbox>
                 </v-col>
                 <v-col>
-                  <v-text-field
+                  <v-checkbox
                     label="DFARS"
-                  ></v-text-field>
+                    v-model="materialLog.defaultProperties.isDFARS"
+                  ></v-checkbox>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
                   <v-text-field
                     label="Supplier Material Grade"
+                    v-model="materialLog.defaultProperties.supplierMaterialGrade"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     label="MRT #"
+                    v-model="materialLog.defaultProperties.mrtNumber"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
-                  <v-text-field
+                  <v-select
+                    v-model="materialLog.defaultProperties.supplierId"
+                    :items="selectableOptions.suppliers"
+                    item-text="value"
+                    item-value="id"
                     label="Supplier"
-                  ></v-text-field>
+                  ></v-select>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col>
                   <v-text-field
                     label="Description"
+                    v-model="materialLog.defaultProperties.description"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -71,11 +99,13 @@
                 <v-col>
                   <v-text-field
                     label="Qty"
+                    v-model="materialLog.defaultProperties.quantity"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     label="Primary Location"
+                    v-model="materialLog.defaultProperties.primaryLocation"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -83,19 +113,25 @@
                 <v-col>
                   <v-text-field
                     label="Date Created"
+                    v-model="materialLog.defaultProperties.dateCreated"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     label="Created By"
+                    v-model="materialLog.defaultProperties.createdBy"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="6">
-                  <v-text-field
+                  <v-select
+                    v-model="materialLog.defaultProperties.unitOfMeasureId"
+                    :items="selectableOptions.unitOfMeasures"
+                    item-text="value"
+                    item-value="id"
                     label="U/M"
-                  ></v-text-field>
+                  ></v-select>
                 </v-col>
               </v-row>
             </v-container>
@@ -106,14 +142,13 @@
             <v-container>
               <v-row>
                 <v-col cols="6">
-                  <v-select
-                    v-model="selectedMagnetOption"
-                    :items="magnetOptions"
+                  <v-switch
+                    v-model="materialLog.isMagnet"
                     label="Magnet"
-                  ></v-select>
+                  ></v-switch>
                 </v-col>
               </v-row>
-              <template v-if="isMagnet">
+              <template v-if="materialLog.isMagnet === true">
                 <v-row>
                   <v-col>
                     <v-card
@@ -129,6 +164,7 @@
                               label="BHmax"
                               hint="MGOe"
                               persistent-hint
+                              v-model="materialLog.magneticProperties.bHmax"
                             ></v-text-field>
                           </v-col>
                           <v-col>
@@ -136,6 +172,7 @@
                               label="Hci"
                               hint="kOe"
                               persistent-hint
+                              v-model="materialLog.magneticProperties.hci"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -145,6 +182,7 @@
                               label="Br"
                               hint="kG"
                               persistent-hint
+                              v-model="materialLog.magneticProperties.br"
                             ></v-text-field>
                           </v-col>
                           <v-col>
@@ -152,6 +190,7 @@
                               label="Hc"
                               hint="kOe"
                               persistent-hint
+                              v-model="materialLog.magneticProperties.hc"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -170,25 +209,32 @@
                       <v-card-text>
                         <v-row>
                           <v-col cols="8">
-                            <v-text-field
+                            <v-select
+                              v-model="materialLog.dimensions.shapeId"
+                              :items="selectableOptions.shapes"
+                              item-text="value"
+                              item-value="id"
                               label="Shape"
-                            ></v-text-field>
+                            ></v-select>
                           </v-col>
                         </v-row>
                         <v-row>
                           <v-col cols="4">
                             <v-text-field
                               label="Dim1"
+                              v-model="materialLog.dimensions.dim1"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="Dim2"
+                              v-model="materialLog.dimensions.dim2"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="DimLm"
+                              v-model="materialLog.dimensions.dimLm"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -197,7 +243,7 @@
                   </v-col>
                 </v-row>
               </template>
-              <template v-else>
+              <template v-else-if="materialLog.isMagnet === false">
                 <v-row>
                   <v-col>
                     <v-card
@@ -209,6 +255,7 @@
                       <v-card-text>
                         <v-text-field
                           label="Material Complies to"
+                          v-model="materialLog.specifications.materialCompliesTo"
                         ></v-text-field>
                       </v-card-text>
                     </v-card>
@@ -224,16 +271,19 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 1"
+                              v-model="materialLog.bars.bars1"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="FT 1"
+                              v-model="materialLog.bars.fT1"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="Total FT"
+                              v-model="materialLog.bars.totalFT"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -241,11 +291,13 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 2"
+                              v-model="materialLog.bars.bars2"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="FT 2"
+                              v-model="materialLog.bars.fT2"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -253,11 +305,13 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 3"
+                              v-model="materialLog.bars.bars3"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="FT 3"
+                              v-model="materialLog.bars.fT3"
                             ></v-text-field>
                           </v-col>
                         </v-row>
@@ -285,27 +339,62 @@ export default {
   props: ['lotNumber'],
   data: function() {
     return {
-      materialLog: {},
-      magnetOptions: ['Yes', 'No'],
-      selectedMagnetOption: 'Yes' // temp
+      materialLog: {
+        defaultProperties: {},
+        isMagnet: null,
+        magneticProperties: {},
+        dimensions: {},
+        specifications: {},
+        bars: {}
+      },
+      selectableOptions: {
+        unitOfMeasures: [],
+        partNumbers: [],
+        suppliers: [],
+        shapes: [],
+        materialLogTypes: []
+      },
+      partNumberOptions: [],
+      partNumber: null,
+      partNumberSearch: null
     }
   },
   mounted: function() {
     console.log(this.lotNumber);
 
-    this.axios.get(`/api/MaterialLog/single/${this.lotNumber}`).then((response) => {
-      console.log(response.data);
-      this.materialLog = response.data;
-    });
+    const vm = this;
 
-    this.axios.get(`/api/MaterialLog/selectableOptions`).then((response) => {
-      console.log(response.data);
-    });
-  },
-  computed: {
-    isMagnet: function() {
-      return this.selectedMagnetOption == 'Yes';
+    function getMaterialLog() {
+      return vm.axios.get(`/api/MaterialLog/single/${vm.lotNumber}`).then((response) => {
+        vm.materialLog = response.data;
+      });
     }
+
+    function getSelectableOptions() {
+      return vm.axios.get(`/api/MaterialLog/selectableOptions`).then((response) => {
+        vm.selectableOptions = response.data;
+      });
+    }
+
+    Promise.all([getMaterialLog(), getSelectableOptions()])
+      .then(function() {
+        console.log(vm.materialLog);
+        console.log(vm.selectableOptions);
+
+        vm.partNumberOptions = vm.selectableOptions.partNumbers.map(function(partNumber) {
+          return partNumber.value;
+        });
+
+        const currentPartNumberObject = vm.selectableOptions.partNumbers.find(function(partNumber) {
+          return partNumber.id == vm.materialLog.defaultProperties.partNumberId;
+        });
+
+        if (currentPartNumberObject) {
+          vm.partNumber = currentPartNumberObject.value;
+        }
+
+        vm.materialLog.defaultProperties.partNumberId = 0;
+      });
   }
 }
 </script>

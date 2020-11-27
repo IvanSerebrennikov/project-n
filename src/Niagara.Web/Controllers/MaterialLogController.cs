@@ -51,7 +51,11 @@ namespace Niagara.Web.Controllers
 
             return Ok(new
             {
-                unitOfMeasures, partNumbers, suppliers, shapes, materialLogTypes
+                unitOfMeasures, 
+                partNumbers, 
+                suppliers, 
+                shapes, 
+                materialLogTypes
             });
         }
 

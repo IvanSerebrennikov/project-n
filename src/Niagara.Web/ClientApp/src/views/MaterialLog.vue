@@ -111,7 +111,10 @@
                   <v-text-field
                     label="Qty"
                     type="number"
-                    :readonly="!editMode"
+                    :readonly="!editMode || !isNew"
+                    :outlined="!isNew"
+                    :hint="!isNew ? 'Can\'t be changed' : ''"
+                    persistent-hint
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.quantity"
                   ></v-text-field>
@@ -765,7 +768,7 @@ export default {
       getSelectableOptions()
     ];
 
-    if (vm.lotNumber != 'new') {
+    if (!vm.isNew) {
       promises.push(getMaterialLog());
       promises.push(vm.getNotes());
     }
@@ -779,6 +782,11 @@ export default {
           vm.materialLog.isMagnet = true;
         }
       });
+  },
+  computed: {
+    isNew: function() {
+      return this.lotNumber == 'new';
+    }
   }
 }
 </script>

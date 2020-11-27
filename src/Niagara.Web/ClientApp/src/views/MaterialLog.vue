@@ -9,6 +9,10 @@
                 <v-col>
                   <v-text-field
                     label="Lot #"
+                    outlined
+                    readonly
+                    hint="Automatically generated"
+                    persistent-hint
                     v-model="materialLog.defaultProperties.lotNumber"
                   ></v-text-field>
                 </v-col>
@@ -17,6 +21,7 @@
                     v-model="partNumber"
                     :items="partNumberOptions"
                     :search-input.sync="partNumberSearch"
+                    :readonly="!editMode"
                     label="Part #"
                     @change="partNumberChanged"
                   >
@@ -36,12 +41,14 @@
                 <v-col>
                   <v-switch
                     v-model="materialLog.isMagnet"
+                    :readonly="!editMode"
                     label="Magnet"
                   ></v-switch>
                 </v-col>
                 <v-col>
                   <v-checkbox
                     label="Available"
+                    :readonly="!editMode"
                     v-model="materialLog.defaultProperties.isAvailable"
                   ></v-checkbox>
                 </v-col>
@@ -52,6 +59,7 @@
                     v-model="supplier"
                     :items="supplierOptions"
                     :search-input.sync="supplierSearch"
+                    :readonly="!editMode"
                     label="Supplier"
                     @change="supplierChanged"
                   >
@@ -71,12 +79,17 @@
                 <v-col>
                   <v-text-field
                     label="PO #"
+                    outlined
+                    readonly
+                    hint="Automatically generated"
+                    persistent-hint
                     v-model="materialLog.defaultProperties.poNumber"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-checkbox
                     label="DFARS"
+                    :readonly="!editMode"
                     v-model="materialLog.defaultProperties.isDFARS"
                   ></v-checkbox>
                 </v-col>
@@ -85,6 +98,7 @@
                 <v-col>
                   <v-text-field
                     label="Description"
+                    :readonly="!editMode"
                     v-model="materialLog.defaultProperties.description"
                   ></v-text-field>
                 </v-col>
@@ -93,12 +107,14 @@
                 <v-col>
                   <v-text-field
                     label="Qty"
+                    :readonly="!editMode"
                     v-model="materialLog.defaultProperties.quantity"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     label="Primary Location"
+                    :readonly="!editMode"
                     v-model="materialLog.defaultProperties.primaryLocation"
                   ></v-text-field>
                 </v-col>
@@ -107,12 +123,14 @@
                 <v-col>
                   <v-text-field
                     label="Supplier Material Grade"
+                    :readonly="!editMode"
                     v-model="materialLog.defaultProperties.supplierMaterialGrade"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     label="MRT #"
+                    :readonly="!editMode"
                     v-model="materialLog.defaultProperties.mrtNumber"
                   ></v-text-field>
                 </v-col>
@@ -124,6 +142,7 @@
                     :items="selectableOptions.unitOfMeasures"
                     item-text="value"
                     item-value="id"
+                    :readonly="!editMode"
                     label="U/M"
                   ></v-select>
                 </v-col>
@@ -133,6 +152,7 @@
                     :items="selectableOptions.materialLogTypes"
                     item-text="value"
                     item-value="id"
+                    :readonly="!editMode"
                     label="Type"
                   ></v-select>
                 </v-col>
@@ -141,12 +161,20 @@
                 <v-col>
                   <v-text-field
                     label="Date Created"
+                    filled
+                    readonly
+                    hint="Automatically generated"
+                    persistent-hint
                     v-model="materialLog.defaultProperties.dateCreated"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     label="Created By"
+                    filled
+                    readonly
+                    hint="Automatically generated"
+                    persistent-hint
                     v-model="materialLog.defaultProperties.createdBy"
                   ></v-text-field>
                 </v-col>
@@ -171,16 +199,16 @@
                           <v-col>
                             <v-text-field
                               label="BHmax"
-                              hint="MGOe"
-                              persistent-hint
+                              suffix="MGOe"
+                              :readonly="!editMode"
                               v-model="materialLog.magneticProperties.bHmax"
                             ></v-text-field>
                           </v-col>
                           <v-col>
                             <v-text-field
                               label="Hci"
-                              hint="kOe"
-                              persistent-hint
+                              suffix="kOe"
+                              :readonly="!editMode"
                               v-model="materialLog.magneticProperties.hci"
                             ></v-text-field>
                           </v-col>
@@ -189,16 +217,16 @@
                           <v-col>
                             <v-text-field
                               label="Br"
-                              hint="kG"
-                              persistent-hint
+                              suffix="kG"
+                              :readonly="!editMode"
                               v-model="materialLog.magneticProperties.br"
                             ></v-text-field>
                           </v-col>
                           <v-col>
                             <v-text-field
                               label="Hc"
-                              hint="kOe"
-                              persistent-hint
+                              suffix="kOe"
+                              :readonly="!editMode"
                               v-model="materialLog.magneticProperties.hc"
                             ></v-text-field>
                           </v-col>
@@ -223,6 +251,7 @@
                               :items="selectableOptions.shapes"
                               item-text="value"
                               item-value="id"
+                              :readonly="!editMode"
                               label="Shape"
                             ></v-select>
                           </v-col>
@@ -231,18 +260,21 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Dim1"
+                              :readonly="!editMode"
                               v-model="materialLog.dimensions.dim1"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="Dim2"
+                              :readonly="!editMode"
                               v-model="materialLog.dimensions.dim2"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="DimLm"
+                              :readonly="!editMode"
                               v-model="materialLog.dimensions.dimLm"
                             ></v-text-field>
                           </v-col>
@@ -264,6 +296,7 @@
                       <v-card-text>
                         <v-text-field
                           label="Material Complies to"
+                          :readonly="!editMode"
                           v-model="materialLog.specifications.materialCompliesTo"
                         ></v-text-field>
                       </v-card-text>
@@ -280,18 +313,21 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 1"
+                              :readonly="!editMode"
                               v-model="materialLog.bars.bars1"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="FT 1"
+                              :readonly="!editMode"
                               v-model="materialLog.bars.fT1"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="Total FT"
+                              :readonly="!editMode"
                               v-model="materialLog.bars.totalFT"
                             ></v-text-field>
                           </v-col>
@@ -300,12 +336,14 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 2"
+                              :readonly="!editMode"
                               v-model="materialLog.bars.bars2"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="FT 2"
+                              :readonly="!editMode"
                               v-model="materialLog.bars.fT2"
                             ></v-text-field>
                           </v-col>
@@ -314,12 +352,14 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 3"
+                              :readonly="!editMode"
                               v-model="materialLog.bars.bars3"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="4">
                             <v-text-field
                               label="FT 3"
+                              :readonly="!editMode"
                               v-model="materialLog.bars.fT3"
                             ></v-text-field>
                           </v-col>
@@ -341,7 +381,30 @@
       <v-row>
         <v-col>
           <v-btn
+            class="mr-6"
+            color="primary"
+            v-show="!editMode"
+            @click="switchEditMode"
+          >
+            <v-icon left>
+              mdi-pencil
+            </v-icon>
+            Edit
+          </v-btn>
+          <v-btn
+            class="mr-6"
+            color="primary"
+            v-show="editMode"
+            @click="switchEditMode"
+          >
+            <v-icon left>
+              mdi-pencil-off
+            </v-icon>
+            Cancel Edit
+          </v-btn>
+          <v-btn
             color="success"
+            v-show="editMode"
             @click="saveMaterialLog"
           >
             <v-icon left>
@@ -361,6 +424,7 @@ export default {
   props: ['lotNumber'],
   data: function() {
     return {
+      editMode: false,
       materialLog: {
         defaultProperties: {},
         isMagnet: null,
@@ -385,6 +449,9 @@ export default {
     }
   },
   methods: {
+    switchEditMode: function() {
+      this.editMode = !this.editMode;
+    },
     partNumberChanged: function(selectedValue) {
       const existingPartNumber = this.partNumberOptions.find(function(partNumber) {
           return partNumber == selectedValue;

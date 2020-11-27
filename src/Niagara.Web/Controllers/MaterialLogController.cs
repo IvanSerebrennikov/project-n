@@ -72,7 +72,7 @@ namespace Niagara.Web.Controllers
 
             var createdMaterialLogModel = _materialLogService.Create(materialLogModel);
 
-            return Ok(createdMaterialLogModel.DefaultProperties.LotNumber);
+            return Ok(createdMaterialLogModel);
         }
 
         [HttpPut]

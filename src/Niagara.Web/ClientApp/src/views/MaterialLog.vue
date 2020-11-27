@@ -34,47 +34,16 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-text-field
-                    label="PO #"
-                    v-model="materialLog.defaultProperties.poNumber"
-                  ></v-text-field>
+                  <v-switch
+                    v-model="materialLog.isMagnet"
+                    label="Magnet"
+                  ></v-switch>
                 </v-col>
-                <v-col>
-                  <v-select
-                    v-model="materialLog.defaultProperties.materialLogTypeId"
-                    :items="selectableOptions.materialLogTypes"
-                    item-text="value"
-                    item-value="id"
-                    label="Type"
-                  ></v-select>
-                </v-col>
-              </v-row>
-              <v-row>
                 <v-col>
                   <v-checkbox
                     label="Available"
                     v-model="materialLog.defaultProperties.isAvailable"
                   ></v-checkbox>
-                </v-col>
-                <v-col>
-                  <v-checkbox
-                    label="DFARS"
-                    v-model="materialLog.defaultProperties.isDFARS"
-                  ></v-checkbox>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    label="Supplier Material Grade"
-                    v-model="materialLog.defaultProperties.supplierMaterialGrade"
-                  ></v-text-field>
-                </v-col>
-                <v-col>
-                  <v-text-field
-                    label="MRT #"
-                    v-model="materialLog.defaultProperties.mrtNumber"
-                  ></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
@@ -96,6 +65,20 @@
                       </v-list-item>
                     </template>
                   </v-combobox>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    label="PO #"
+                    v-model="materialLog.defaultProperties.poNumber"
+                  ></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-checkbox
+                    label="DFARS"
+                    v-model="materialLog.defaultProperties.isDFARS"
+                  ></v-checkbox>
                 </v-col>
               </v-row>
               <v-row>
@@ -123,6 +106,40 @@
               <v-row>
                 <v-col>
                   <v-text-field
+                    label="Supplier Material Grade"
+                    v-model="materialLog.defaultProperties.supplierMaterialGrade"
+                  ></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    label="MRT #"
+                    v-model="materialLog.defaultProperties.mrtNumber"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-select
+                    v-model="materialLog.defaultProperties.unitOfMeasureId"
+                    :items="selectableOptions.unitOfMeasures"
+                    item-text="value"
+                    item-value="id"
+                    label="U/M"
+                  ></v-select>
+                </v-col>
+                <v-col>
+                  <v-select
+                    v-model="materialLog.defaultProperties.materialLogTypeId"
+                    :items="selectableOptions.materialLogTypes"
+                    item-text="value"
+                    item-value="id"
+                    label="Type"
+                  ></v-select>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-text-field
                     label="Date Created"
                     v-model="materialLog.defaultProperties.dateCreated"
                   ></v-text-field>
@@ -134,31 +151,12 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row>
-                <v-col cols="6">
-                  <v-select
-                    v-model="materialLog.defaultProperties.unitOfMeasureId"
-                    :items="selectableOptions.unitOfMeasures"
-                    item-text="value"
-                    item-value="id"
-                    label="U/M"
-                  ></v-select>
-                </v-col>
-              </v-row>
             </v-container>
           </v-form>
         </v-col>
         <v-col cols="12" lg="6">
           <v-form>
             <v-container>
-              <v-row>
-                <v-col cols="6">
-                  <v-switch
-                    v-model="materialLog.isMagnet"
-                    label="Magnet"
-                  ></v-switch>
-                </v-col>
-              </v-row>
               <template v-if="materialLog.isMagnet === true">
                 <v-row>
                   <v-col>
@@ -417,9 +415,8 @@ export default {
       function create() {
         vm.axios.post(`/api/MaterialLog`, requestData).then((response) => {
           console.log(response);
-          const lotNumber = response.data;
-          vm.materialLog.defaultProperties.lotNumber = lotNumber;
-          vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: lotNumber }});
+          vm.materialLog = response.data;
+          vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: vm.materialLog.defaultProperties.lotNumber }});
         });
       }
 

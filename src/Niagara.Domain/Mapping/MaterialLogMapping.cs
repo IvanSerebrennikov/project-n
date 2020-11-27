@@ -97,7 +97,7 @@ namespace Niagara.Domain.Mapping
                 entity.SupplierMaterialGrade = model.DefaultProperties.SupplierMaterialGrade;
                 entity.MRTNumber = model.DefaultProperties.MRTNumber;
 
-                entity.IsMagnet = entity.IsMagnet;
+                entity.IsMagnet = model.IsMagnet;
 
                 entity.BHmax = model.MagneticProperties.BHmax;
                 entity.Br = model.MagneticProperties.Br;

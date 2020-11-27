@@ -99,25 +99,50 @@ namespace Niagara.Domain.Mapping
 
                 entity.IsMagnet = model.IsMagnet;
 
-                entity.BHmax = model.MagneticProperties.BHmax;
-                entity.Br = model.MagneticProperties.Br;
-                entity.Hci = model.MagneticProperties.Hci;
-                entity.Hc = model.MagneticProperties.Hc;
+                if (entity.IsMagnet)
+                {
+                    entity.BHmax = model.MagneticProperties.BHmax;
+                    entity.Br = model.MagneticProperties.Br;
+                    entity.Hci = model.MagneticProperties.Hci;
+                    entity.Hc = model.MagneticProperties.Hc;
 
-                entity.ShapeId = model.Dimensions.ShapeId;
-                entity.Dim1 = model.Dimensions.Dim1;
-                entity.Dim2 = model.Dimensions.Dim2;
-                entity.DimLm = model.Dimensions.DimLm;
+                    entity.ShapeId = model.Dimensions.ShapeId;
+                    entity.Dim1 = model.Dimensions.Dim1;
+                    entity.Dim2 = model.Dimensions.Dim2;
+                    entity.DimLm = model.Dimensions.DimLm;
 
-                entity.MaterialCompliesTo = model.Specifications.MaterialCompliesTo;
+                    entity.MaterialCompliesTo = null;
 
-                entity.Bars1 = model.Bars.Bars1;
-                entity.Bars2 = model.Bars.Bars2;
-                entity.Bars3 = model.Bars.Bars3;
-                entity.FT1 = model.Bars.FT1;
-                entity.FT2 = model.Bars.FT2;
-                entity.FT3 = model.Bars.FT3;
-                entity.TotalFT = model.Bars.TotalFT;
+                    entity.Bars1 = null;
+                    entity.Bars2 = null;
+                    entity.Bars3 = null;
+                    entity.FT1 = null;
+                    entity.FT2 = null;
+                    entity.FT3 = null;
+                    entity.TotalFT = null;
+                }
+                else
+                {
+                    entity.BHmax = null;
+                    entity.Br = null;
+                    entity.Hci = null;
+                    entity.Hc = null;
+
+                    entity.ShapeId = null;
+                    entity.Dim1 = null;
+                    entity.Dim2 = null;
+                    entity.DimLm = null;
+
+                    entity.MaterialCompliesTo = model.Specifications.MaterialCompliesTo;
+
+                    entity.Bars1 = model.Bars.Bars1;
+                    entity.Bars2 = model.Bars.Bars2;
+                    entity.Bars3 = model.Bars.Bars3;
+                    entity.FT1 = model.Bars.FT1;
+                    entity.FT2 = model.Bars.FT2;
+                    entity.FT3 = model.Bars.FT3;
+                    entity.TotalFT = model.Bars.TotalFT;
+                }
             }
         }
 

@@ -3,7 +3,7 @@
     <v-container>
       <v-row class="mb-6">
         <v-col cols="12" lg="6">
-          <v-form>
+          <v-form ref="defaultPropertiesForm">
             <v-container>
               <v-row>
                 <v-col>
@@ -22,6 +22,7 @@
                     :items="partNumberOptions"
                     :search-input.sync="partNumberSearch"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     label="Part #"
                     @change="partNumberChanged"
                   >
@@ -60,6 +61,7 @@
                     :items="supplierOptions"
                     :search-input.sync="supplierSearch"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     label="Supplier"
                     @change="supplierChanged"
                   >
@@ -99,6 +101,7 @@
                   <v-text-field
                     label="Description"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.description"
                   ></v-text-field>
                 </v-col>
@@ -107,7 +110,9 @@
                 <v-col>
                   <v-text-field
                     label="Qty"
+                    type="number"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.quantity"
                   ></v-text-field>
                 </v-col>
@@ -115,6 +120,7 @@
                   <v-text-field
                     label="Primary Location"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.primaryLocation"
                   ></v-text-field>
                 </v-col>
@@ -124,13 +130,16 @@
                   <v-text-field
                     label="Supplier Material Grade"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.supplierMaterialGrade"
                   ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
                     label="MRT #"
+                    type="number"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.mrtNumber"
                   ></v-text-field>
                 </v-col>
@@ -143,6 +152,7 @@
                     item-text="value"
                     item-value="id"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     label="U/M"
                   ></v-select>
                 </v-col>
@@ -153,6 +163,7 @@
                     item-text="value"
                     item-value="id"
                     :readonly="!editMode"
+                    :rules="[validationRules.required]"
                     label="Type"
                   ></v-select>
                 </v-col>
@@ -260,6 +271,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Dim1"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.dimensions.dim1"
                             ></v-text-field>
@@ -267,6 +279,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Dim2"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.dimensions.dim2"
                             ></v-text-field>
@@ -274,6 +287,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="DimLm"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.dimensions.dimLm"
                             ></v-text-field>
@@ -313,6 +327,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 1"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.bars.bars1"
                             ></v-text-field>
@@ -320,6 +335,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="FT 1"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.bars.fT1"
                             ></v-text-field>
@@ -327,6 +343,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Total FT"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.bars.totalFT"
                             ></v-text-field>
@@ -336,6 +353,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 2"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.bars.bars2"
                             ></v-text-field>
@@ -343,6 +361,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="FT 2"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.bars.fT2"
                             ></v-text-field>
@@ -352,6 +371,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="Bars 3"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.bars.bars3"
                             ></v-text-field>
@@ -359,6 +379,7 @@
                           <v-col cols="4">
                             <v-text-field
                               label="FT 3"
+                              type="number"
                               :readonly="!editMode"
                               v-model="materialLog.bars.fT3"
                             ></v-text-field>
@@ -445,14 +466,26 @@ export default {
       partNumberSearch: null,
       supplierOptions: [],
       supplier: null,
-      supplierSearch: null
+      supplierSearch: null,
+      validationRules: {
+        required: function(value) {
+          if (value === null || value === undefined || !value.toString().trim()) {
+            return 'Required.'
+          }
+          return true;
+        }
+      }
     }
   },
   methods: {
     switchEditMode: function() {
       this.editMode = !this.editMode;
+      this.$refs.defaultPropertiesForm.resetValidation();
     },
     partNumberChanged: function(selectedValue) {
+      if (selectedValue === null || selectedValue === undefined || !selectedValue.toString().trim())
+        return;
+
       const existingPartNumber = this.partNumberOptions.find(function(partNumber) {
           return partNumber == selectedValue;
         });
@@ -472,6 +505,11 @@ export default {
     },
     saveMaterialLog: function() {
       var vm = this;
+
+      const isValid = vm.$refs.defaultPropertiesForm.validate();
+
+      if (!isValid)
+        return;
 
       const requestData = {
         materialLog: vm.materialLog,

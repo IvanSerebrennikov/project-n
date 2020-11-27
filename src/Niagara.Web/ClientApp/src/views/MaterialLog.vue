@@ -263,6 +263,7 @@
                               item-text="value"
                               item-value="id"
                               :readonly="!editMode"
+                              @change="shapeChanged"
                               label="Shape"
                             ></v-select>
                           </v-col>
@@ -502,6 +503,11 @@ export default {
       if (!existingSupplier) {
         this.supplierOptions.unshift(selectedValue);
       }
+    },
+    shapeChanged: function(selectedValue) {
+      this.materialLog.dimensions.dim1 = null;
+      this.materialLog.dimensions.dim2 = null;
+      this.materialLog.dimensions.dimLm = null;
     },
     saveMaterialLog: function() {
       var vm = this;

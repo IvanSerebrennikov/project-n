@@ -19,6 +19,7 @@
                 <v-col>
                   <v-combobox
                     v-model="partNumber"
+                    outlined
                     :items="partNumberOptions"
                     :search-input.sync="partNumberSearch"
                     :readonly="!editMode"
@@ -58,6 +59,7 @@
                 <v-col>
                   <v-combobox
                     v-model="supplier"
+                    outlined
                     :items="supplierOptions"
                     :search-input.sync="supplierSearch"
                     :readonly="!editMode"
@@ -100,6 +102,7 @@
                 <v-col>
                   <v-text-field
                     label="Description"
+                    outlined
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.description"
@@ -112,7 +115,7 @@
                     label="Qty"
                     type="number"
                     :readonly="!editMode || !isNew"
-                    :outlined="!isNew"
+                    outlined
                     :hint="!isNew ? 'Can\'t be changed' : ''"
                     persistent-hint
                     :rules="[validationRules.required]"
@@ -122,6 +125,7 @@
                 <v-col>
                   <v-text-field
                     label="Primary Location"
+                    outlined
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.primaryLocation"
@@ -132,6 +136,7 @@
                 <v-col>
                   <v-text-field
                     label="Supplier Material Grade"
+                    outlined
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.supplierMaterialGrade"
@@ -140,6 +145,7 @@
                 <v-col>
                   <v-text-field
                     label="MRT #"
+                    outlined
                     type="number"
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
@@ -151,6 +157,7 @@
                 <v-col>
                   <v-select
                     v-model="materialLog.defaultProperties.unitOfMeasureId"
+                    outlined
                     :items="selectableOptions.unitOfMeasures"
                     item-text="value"
                     item-value="id"
@@ -162,6 +169,7 @@
                 <v-col>
                   <v-select
                     v-model="materialLog.defaultProperties.materialLogTypeId"
+                    outlined
                     :items="selectableOptions.materialLogTypes"
                     item-text="value"
                     item-value="id"

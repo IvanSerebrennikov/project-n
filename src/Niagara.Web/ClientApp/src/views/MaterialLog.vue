@@ -18,6 +18,7 @@
                     :items="partNumberOptions"
                     :search-input.sync="partNumberSearch"
                     label="Part #"
+                    @change="partNumberChanged"
                   >
                     <template v-slot:no-data>
                       <v-list-item>
@@ -78,13 +79,23 @@
               </v-row>
               <v-row>
                 <v-col>
-                  <v-select
-                    v-model="materialLog.defaultProperties.supplierId"
-                    :items="selectableOptions.suppliers"
-                    item-text="value"
-                    item-value="id"
+                  <v-combobox
+                    v-model="supplier"
+                    :items="supplierOptions"
+                    :search-input.sync="supplierSearch"
                     label="Supplier"
-                  ></v-select>
+                    @change="supplierChanged"
+                  >
+                    <template v-slot:no-data>
+                      <v-list-item>
+                        <v-list-item-content>
+                          <v-list-item-title>
+                            No results matching "<strong>{{ supplierSearch }}</strong>". Press <kbd>enter</kbd> to create a new one.
+                          </v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
+                  </v-combobox>
                 </v-col>
               </v-row>
               <v-row>
@@ -356,7 +367,30 @@ export default {
       },
       partNumberOptions: [],
       partNumber: null,
-      partNumberSearch: null
+      partNumberSearch: null,
+      supplierOptions: [],
+      supplier: null,
+      supplierSearch: null
+    }
+  },
+  methods: {
+    partNumberChanged: function(selectedValue) {
+      const existingPartNumber = this.partNumberOptions.find(function(partNumber) {
+          return partNumber == selectedValue;
+        });
+
+      if (!existingPartNumber) {
+        this.partNumberOptions.unshift(selectedValue);
+      }
+    },
+    supplierChanged: function(selectedValue) {
+      const existingSupplier = this.supplierOptions.find(function(supplier) {
+          return supplier == selectedValue;
+        });
+
+      if (!existingSupplier) {
+        this.supplierOptions.unshift(selectedValue);
+      }
     }
   },
   mounted: function() {
@@ -376,12 +410,8 @@ export default {
       });
     }
 
-    Promise.all([getMaterialLog(), getSelectableOptions()])
-      .then(function() {
-        console.log(vm.materialLog);
-        console.log(vm.selectableOptions);
-
-        vm.partNumberOptions = vm.selectableOptions.partNumbers.map(function(partNumber) {
+    function initPartNumbersCombobox() {
+      vm.partNumberOptions = vm.selectableOptions.partNumbers.map(function(partNumber) {
           return partNumber.value;
         });
 
@@ -394,6 +424,31 @@ export default {
         }
 
         vm.materialLog.defaultProperties.partNumberId = 0;
+    }
+
+    function initSupplierCombobox() {
+      vm.supplierOptions = vm.selectableOptions.suppliers.map(function(supplier) {
+          return supplier.value;
+        });
+
+        const currentSupplierObject = vm.selectableOptions.suppliers.find(function(supplier) {
+          return supplier.id == vm.materialLog.defaultProperties.supplierId;
+        });
+
+        if (currentSupplierObject) {
+          vm.supplier = currentSupplierObject.value;
+        }
+
+        vm.materialLog.defaultProperties.supplierId = 0;
+    }
+
+    Promise.all([getMaterialLog(), getSelectableOptions()])
+      .then(function() {
+        console.log(vm.materialLog);
+        console.log(vm.selectableOptions);
+
+        initPartNumbersCombobox();
+        initSupplierCombobox();
       });
   }
 }

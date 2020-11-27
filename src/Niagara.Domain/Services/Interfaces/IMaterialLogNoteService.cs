@@ -7,6 +7,6 @@ namespace Niagara.Domain.Services.Interfaces
     {
         IReadOnlyList<MaterialLogNoteModel> GetAllByLotNumber(string lotNumber);
 
-        MaterialLogNoteModel Create(MaterialLogNoteModel model);
+        MaterialLogNoteModel Create(string materialLogLotNumber, string text);
     }
 }

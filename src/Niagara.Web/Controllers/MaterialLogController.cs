@@ -83,6 +83,8 @@ namespace Niagara.Web.Controllers
 
             var createdMaterialLogModel = _materialLogService.Create(materialLogModel);
 
+            CreateNotes(createdMaterialLogModel.DefaultProperties.LotNumber, request.NewNotes);
+
             return Ok(createdMaterialLogModel);
         }
 
@@ -103,6 +105,8 @@ namespace Niagara.Web.Controllers
                 return BadRequest("Material Log was not found.");
             }
 
+            CreateNotes(updatedMaterialLogModel.DefaultProperties.LotNumber, request.NewNotes);
+
             return Ok();
         }
 
@@ -122,6 +126,17 @@ namespace Niagara.Web.Controllers
                 _selectableOptionService.CreateSupplier(supplierValue);
 
             return supplier.Id;
+        }
+
+        private void CreateNotes(string materialLogLotNumber, IReadOnlyList<string> notes)
+        {
+            foreach (var note in notes)
+            {
+                if (string.IsNullOrWhiteSpace(note))
+                    continue;
+
+                _materialLogNoteService.Create(materialLogLotNumber, note);
+            }
         }
     }
 }

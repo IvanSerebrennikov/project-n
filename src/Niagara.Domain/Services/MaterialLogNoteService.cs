@@ -24,12 +24,12 @@ namespace Niagara.Domain.Services
                 .Select(x => x.ToModel()).ToList();
         }
 
-        public MaterialLogNoteModel Create(MaterialLogNoteModel model)
+        public MaterialLogNoteModel Create(string materialLogLotNumber, string text)
         {
             var entity = new MaterialLogNote();
 
-            entity.MaterialLogId = model.MaterialLogLotNumber;
-            entity.Text = model.Text;
+            entity.MaterialLogId = materialLogLotNumber;
+            entity.Text = text;
             entity.DateTimeCreated = DateTime.Now;
 
             entity.CreatedBy = "LoggedIn User"; // temp

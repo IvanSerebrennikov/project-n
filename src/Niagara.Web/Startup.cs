@@ -46,6 +46,7 @@ namespace Niagara.Web
             services.AddSingleton<ShapeInMemoryProvider>();
             services.AddSingleton<SupplierInMemoryProvider>();
             services.AddSingleton<UnitOfMeasureInMemoryProvider>();
+            services.AddSingleton<MaterialLogNoteInMemoryProvider>();
 
             services.AddSingleton<InMemoryDataGenerator>();
 
@@ -55,6 +56,7 @@ namespace Niagara.Web
             services.AddScoped<IShapeRepository, ShapeInMemoryRepository>();
             services.AddScoped<ISupplierRepository, SupplierInMemoryRepository>();
             services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureInMemoryRepository>();
+            services.AddScoped<IMaterialLogNoteRepository, MaterialLogNoteInMemoryRepository>();
 
             services.AddScoped<IMaterialLogService, MaterialLogService>();
             services.AddScoped<ISelectableOptionService, SelectableOptionService>();

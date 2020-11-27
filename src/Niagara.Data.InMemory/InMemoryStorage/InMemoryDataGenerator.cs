@@ -14,6 +14,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
         private readonly ShapeInMemoryProvider _shapeInMemoryProvider;
         private readonly SupplierInMemoryProvider _supplierInMemoryProvider;
         private readonly UnitOfMeasureInMemoryProvider _unitOfMeasureInMemoryProvider;
+        private readonly MaterialLogNoteInMemoryProvider _materialLogNoteInMemoryProvider;
 
         public InMemoryDataGenerator(
             MaterialLogInMemoryProvider materialLogsInMemoryProvider,
@@ -21,7 +22,8 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             PartNumberInMemoryProvider partNumberInMemoryProvider,
             ShapeInMemoryProvider shapeInMemoryProvider,
             SupplierInMemoryProvider supplierInMemoryProvider,
-            UnitOfMeasureInMemoryProvider unitOfMeasureInMemoryProvider
+            UnitOfMeasureInMemoryProvider unitOfMeasureInMemoryProvider,
+            MaterialLogNoteInMemoryProvider materialLogNoteInMemoryProvider
         )
         {
             _materialLogsInMemoryProvider = materialLogsInMemoryProvider;
@@ -30,6 +32,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             _shapeInMemoryProvider = shapeInMemoryProvider;
             _supplierInMemoryProvider = supplierInMemoryProvider;
             _unitOfMeasureInMemoryProvider = unitOfMeasureInMemoryProvider;
+            _materialLogNoteInMemoryProvider = materialLogNoteInMemoryProvider;
         }
 
         public void Generate()
@@ -39,7 +42,10 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             GenerateSuppliers();
             GenerateShapes();
             GenerateMaterialLogTypes();
+
             GenerateMaterialLogs();
+
+            GenerateMaterialLogNotes();
         }
 
         private void GenerateUnitOfMeasures()
@@ -150,111 +156,112 @@ namespace Niagara.Data.InMemory.InMemoryStorage
 
         private void GenerateMaterialLogs()
         {
-            _materialLogsInMemoryProvider.Entities.Add(
-                new MaterialLog
-                {
-                    Id = _materialLogsInMemoryProvider.GenerateEntityId(),
-                    Description = "Maecenas eu turpis",
-                    Quantity = 115,
-                    DateCreated = new DateTime(2020, 09, 05),
-                    DateUpdated = new DateTime(2020, 09, 15),
+            var count = 15;
 
-                    IsMagnet = true,
-                    BHmax = "95",
-                    Br = "10",
-                    Hci = "119",
-                    Hc = "1002",
-                    ShapeId = GetAnyEntityId(_shapeInMemoryProvider.Entities, 999),
-                    Dim1 = 14,
-                    Dim2 = 23,
-                    DimLm = 106,
+            for (var i = 0; i < count; i++)
+            {
+                _materialLogsInMemoryProvider.Entities.Add(
+                    new MaterialLog
+                    {
+                        Id = _materialLogsInMemoryProvider.GenerateEntityId(),
+                        Description = string.Join(" ", Faker.Lorem.Words(3)),
+                        Quantity = Faker.RandomNumber.Next(1, 300),
+                        DateCreated = new DateTime(2020, 10, Faker.RandomNumber.Next(1, 30)),
+                        DateUpdated = new DateTime(2020, 11, 27),
 
-                    PONumber = $"PO{new Random(1000).Next(1000, 9999)}",
-                    UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities, 1001),
-                    PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities, 1002),
-                    IsAvailable = true,
-                    SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities, 1003),
-                    IsDFARS = true,
-                    PrimaryLocation = "Nulla facilisi",
-                    MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities, 1004),
-                    SupplierMaterialGrade = "Morbi a mauris",
-                    MRTNumber = 19,
-                    CreatedBy = "User11"
-                });
+                        IsMagnet = true,
+                        BHmax = Faker.RandomNumber.Next(1, 1000).ToString(),
+                        Br = Faker.RandomNumber.Next(1, 1000).ToString(),
+                        Hci = Faker.RandomNumber.Next(1, 1000).ToString(),
+                        Hc = Faker.RandomNumber.Next(1, 1000).ToString(),
+                        ShapeId = GetAnyEntityId(_shapeInMemoryProvider.Entities, (i + 1) * 3),
+                        Dim1 = Faker.RandomNumber.Next(1, 200),
+                        Dim2 = Faker.RandomNumber.Next(1, 200),
+                        DimLm = Faker.RandomNumber.Next(1, 200),
 
-            _materialLogsInMemoryProvider.Entities.Add(
-                new MaterialLog
-                {
-                    Id = _materialLogsInMemoryProvider.GenerateEntityId(),
-                    Description = "Donec luctus mattis justo vel facilisis",
-                    Quantity = 5,
-                    DateCreated = new DateTime(2020, 10, 25),
-                    DateUpdated = new DateTime(2020, 11, 01),
+                        PONumber = $"PO{Faker.RandomNumber.Next(1000, 9999)}",
+                        UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities, (i + 1) * 3),
+                        PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities, (i + 1) * 5),
+                        IsAvailable = Faker.Boolean.Random(),
+                        SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities, (i + 1) * 7),
+                        IsDFARS = Faker.Boolean.Random(),
+                        PrimaryLocation = Faker.Country.Name(),
+                        MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities, (i + 1) * 11),
+                        SupplierMaterialGrade = string.Join(" ", Faker.Lorem.Words(3)),
+                        MRTNumber = Faker.RandomNumber.Next(100, 999),
+                        CreatedBy = Faker.Name.FullName()
+                    });
 
-                    IsMagnet = false,
-                    MaterialCompliesTo = "Fusce in mi nisi",
-                    Bars1 = 16,
-                    Bars2 = 3,
-                    Bars3 = 14,
-                    FT1 = 105,
-                    FT2 = null,
-                    FT3 = 4,
-                    TotalFT = 1742,
+                _materialLogsInMemoryProvider.Entities.Add(
+                    new MaterialLog
+                    {
+                        Id = _materialLogsInMemoryProvider.GenerateEntityId(),
+                        Description = string.Join(" ", Faker.Lorem.Words(3)),
+                        Quantity = Faker.RandomNumber.Next(1, 300),
+                        DateCreated = new DateTime(2020, 10, Faker.RandomNumber.Next(1, 30)),
+                        DateUpdated = new DateTime(2020, 11, 27),
 
-                    PONumber = $"PO{new Random(2000).Next(1000, 9999)}",
-                    UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities, 2001),
-                    PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities, 2002),
-                    IsAvailable = true,
-                    SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities, 2003),
-                    IsDFARS = false,
-                    PrimaryLocation = "Cras ut viverra lorem",
-                    MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities, 2004),
-                    SupplierMaterialGrade = "Proin fermentum",
-                    MRTNumber = 54,
-                    CreatedBy = "Bob"
-                });
+                        IsMagnet = false,
+                        MaterialCompliesTo = string.Join(" ", Faker.Lorem.Words(4)),
+                        Bars1 = Faker.Boolean.Random() ? (int?)Faker.RandomNumber.Next(1, 90) : null,
+                        Bars2 = Faker.Boolean.Random() ? (int?)Faker.RandomNumber.Next(1, 90) : null,
+                        Bars3 = Faker.Boolean.Random() ? (int?)Faker.RandomNumber.Next(1, 90) : null,
+                        FT1 = Faker.Boolean.Random() ? (int?)Faker.RandomNumber.Next(1, 190) : null,
+                        FT2 = Faker.Boolean.Random() ? (int?)Faker.RandomNumber.Next(1, 190) : null,
+                        FT3 = Faker.Boolean.Random() ? (int?)Faker.RandomNumber.Next(1, 190) : null,
+                        TotalFT = Faker.RandomNumber.Next(100, 1000),
 
-            _materialLogsInMemoryProvider.Entities.Add(
-                new MaterialLog
-                {
-                    Id = _materialLogsInMemoryProvider.GenerateEntityId(),
-                    Description = "Duis consequat risus quis nibh faucibus lacinia",
-                    Quantity = 27,
-                    DateCreated = new DateTime(2020, 10, 29),
-                    DateUpdated = null,
+                        PONumber = $"PO{Faker.RandomNumber.Next(1000, 9999)}",
+                        UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities, (i + 1) * 13),
+                        PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities, (i + 1) * 17),
+                        IsAvailable = Faker.Boolean.Random(),
+                        SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities, (i + 1) * 19),
+                        IsDFARS = Faker.Boolean.Random(),
+                        PrimaryLocation = Faker.Country.Name(),
+                        MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities, (i + 1) * 23),
+                        SupplierMaterialGrade = string.Join(" ", Faker.Lorem.Words(3)),
+                        MRTNumber = Faker.RandomNumber.Next(100, 999),
+                        CreatedBy = Faker.Name.FullName()
+                    });
+            }
+        }
 
-                    IsMagnet = true,
-                    BHmax = "87",
-                    Br = "15",
-                    Hci = "100",
-                    Hc = "817",
-                    ShapeId = GetAnyEntityId(_shapeInMemoryProvider.Entities, 2999),
-                    Dim1 = 3,
-                    Dim2 = 2,
-                    DimLm = 1007,
+        private void GenerateMaterialLogNotes()
+        {
+            var count = 100;
 
-                    PONumber = $"PO{new Random(3000).Next(1000, 9999)}",
-                    UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities, 3001),
-                    PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities, 3002),
-                    IsAvailable = false,
-                    SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities, 3003),
-                    IsDFARS = true,
-                    PrimaryLocation = "Vivamus metus quam",
-                    MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities, 3004),
-                    SupplierMaterialGrade = "Maecenas ac mauris",
-                    MRTNumber = 28,
-                    CreatedBy = "User X"
-                });
+            for (var i = 0; i < count; i++)
+            {
+                var day = Faker.RandomNumber.Next(1, 30);
+                var hour = Faker.RandomNumber.Next(1, 24);
+                var minute = Faker.RandomNumber.Next(1, 60);
+                var second = Faker.RandomNumber.Next(1, 60);
+
+                _materialLogNoteInMemoryProvider.Entities.Add(
+                    new MaterialLogNote
+                    {
+                        Id = _materialLogNoteInMemoryProvider.GenerateEntityId(),
+                        MaterialLogId = GetAnyMaterialLogId(_materialLogsInMemoryProvider.Entities, (i + 1) * 2),
+                        Text = Faker.Lorem.Sentence(3),
+                        DateTimeCreated = new DateTime(2020, 11, day, hour, minute, second),
+                        CreatedBy = Faker.Name.FullName()
+                    });
+            }
         }
 
         private int GetAnyEntityId<TEntity>(List<TEntity> entities, int seed)
             where TEntity : IEntity<int>
         {
-            var unitOfMeasures = entities;
+            var index = new Random(seed).Next(0, entities.Count);
 
-            var index = new Random(seed).Next(0, unitOfMeasures.Count);
+            return entities[index].Id;
+        }
 
-            return unitOfMeasures[index].Id;
+        private string GetAnyMaterialLogId(List<MaterialLog> entities, int seed)
+        {
+            var index = new Random(seed).Next(0, entities.Count);
+
+            return entities[index].Id;
         }
     }
 }

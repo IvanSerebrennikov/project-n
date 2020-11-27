@@ -25,12 +25,12 @@ namespace Niagara.Domain.Services
 
         public IReadOnlyList<MaterialLogModel> GetAll()
         {
-            return _repository.GetAll().Select(x => x.ToModel()).ToList();
+            return _repository.GetAll().OrderByDescending(x => x.DateCreated).Select(x => x.ToModel()).ToList();
         }
 
         public IReadOnlyList<MaterialLogReducedModel> GetAllReduced()
         {
-            return _repository.GetAllReduced().Select(x => x.ToReducedModel()).ToList();
+            return _repository.GetAllReduced().OrderByDescending(x => x.DateCreated).Select(x => x.ToReducedModel()).ToList();
         }
 
         public MaterialLogModel Create(MaterialLogModel model)

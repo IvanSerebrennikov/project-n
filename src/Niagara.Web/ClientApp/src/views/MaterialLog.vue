@@ -397,7 +397,37 @@
       </v-row>
       <v-row>
         <v-col>
-          Notes
+          <v-simple-table>
+            <template>
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    Date
+                  </th>
+                  <th class="text-left">
+                    Time
+                  </th>
+                  <th class="text-left">
+                    Author
+                  </th>
+                  <th class="text-left">
+                    Note
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="note in notes"
+                  :key="note.id"
+                >
+                  <td>{{ note.dateCreated }}</td>
+                  <td>{{ note.timeCreated }}</td>
+                  <td>{{ note.createdBy }}</td>
+                  <td>{{ note.text }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
         </v-col>
       </v-row>
       <v-row>
@@ -462,6 +492,7 @@ export default {
         shapes: [],
         materialLogTypes: []
       },
+      notes: [],
       partNumberOptions: [],
       partNumber: null,
       partNumberSearch: null,
@@ -562,6 +593,12 @@ export default {
       });
     }
 
+    function getNotes() {
+      return vm.axios.get(`/api/MaterialLog/notes/${vm.lotNumber}`).then((response) => {
+        vm.notes = response.data;
+      });
+    }
+
     function initPartNumbersCombobox() {
       vm.partNumberOptions = vm.selectableOptions.partNumbers.map(function(partNumber) {
           return partNumber.value;
@@ -600,13 +637,11 @@ export default {
 
     if (vm.lotNumber != 'new') {
       promises.push(getMaterialLog());
+      promises.push(getNotes());
     }
 
     Promise.all(promises)
       .then(function() {
-        console.log(vm.materialLog);
-        console.log(vm.selectableOptions);
-
         initPartNumbersCombobox();
         initSupplierCombobox();
 

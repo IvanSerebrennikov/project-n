@@ -2,6 +2,7 @@
 using System.Globalization;
 using Niagara.Data.Common.Entities;
 using Niagara.Data.Common.Projections;
+using Niagara.Domain.Helpers;
 using Niagara.Domain.Models;
 
 namespace Niagara.Domain.Mapping
@@ -144,11 +145,6 @@ namespace Niagara.Domain.Mapping
                     entity.TotalFT = model.Bars.TotalFT;
                 }
             }
-        }
-
-        private static string ToDateString(this DateTime dateTime)
-        {
-            return dateTime.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
         }
     }
 }

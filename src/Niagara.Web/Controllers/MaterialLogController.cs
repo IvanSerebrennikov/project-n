@@ -15,11 +15,16 @@ namespace Niagara.Web.Controllers
     {
         private readonly IMaterialLogService _materialLogService;
         private readonly ISelectableOptionService _selectableOptionService;
+        private readonly IMaterialLogNoteService _materialLogNoteService;
 
-        public MaterialLogController(IMaterialLogService materialLogService, ISelectableOptionService selectableOptionService)
+        public MaterialLogController(
+            IMaterialLogService materialLogService, 
+            ISelectableOptionService selectableOptionService,
+            IMaterialLogNoteService materialLogNoteService)
         {
             _materialLogService = materialLogService;
             _selectableOptionService = selectableOptionService;
+            _materialLogNoteService = materialLogNoteService;
         }
 
         [HttpGet("all")]
@@ -58,6 +63,12 @@ namespace Niagara.Web.Controllers
                 shapes, 
                 materialLogTypes
             });
+        }
+
+        [HttpGet("notes/{lotNumber}")]
+        public IEnumerable<MaterialLogNoteModel> GetNotes(string lotNumber)
+        {
+            return _materialLogNoteService.GetAllByLotNumber(lotNumber);
         }
 
         [HttpPost]

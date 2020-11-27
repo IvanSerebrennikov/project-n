@@ -166,7 +166,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
                         Id = _materialLogsInMemoryProvider.GenerateEntityId(),
                         Description = string.Join(" ", Faker.Lorem.Words(3)),
                         Quantity = Faker.RandomNumber.Next(1, 300),
-                        DateCreated = new DateTime(2020, 10, Faker.RandomNumber.Next(1, 30)),
+                        DateCreated = new DateTime(2020, 10, Faker.RandomNumber.Next(1, 29)),
                         DateUpdated = new DateTime(2020, 11, 27),
 
                         IsMagnet = true,
@@ -174,19 +174,19 @@ namespace Niagara.Data.InMemory.InMemoryStorage
                         Br = Faker.RandomNumber.Next(1, 1000).ToString(),
                         Hci = Faker.RandomNumber.Next(1, 1000).ToString(),
                         Hc = Faker.RandomNumber.Next(1, 1000).ToString(),
-                        ShapeId = GetAnyEntityId(_shapeInMemoryProvider.Entities, (i + 1) * 3),
+                        ShapeId = GetAnyEntityId(_shapeInMemoryProvider.Entities),
                         Dim1 = Faker.RandomNumber.Next(1, 200),
                         Dim2 = Faker.RandomNumber.Next(1, 200),
                         DimLm = Faker.RandomNumber.Next(1, 200),
 
                         PONumber = $"PO{Faker.RandomNumber.Next(1000, 9999)}",
-                        UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities, (i + 1) * 3),
-                        PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities, (i + 1) * 5),
+                        UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities),
+                        PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities),
                         IsAvailable = Faker.Boolean.Random(),
-                        SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities, (i + 1) * 7),
+                        SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities),
                         IsDFARS = Faker.Boolean.Random(),
                         PrimaryLocation = Faker.Country.Name(),
-                        MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities, (i + 1) * 11),
+                        MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities),
                         SupplierMaterialGrade = string.Join(" ", Faker.Lorem.Words(3)),
                         MRTNumber = Faker.RandomNumber.Next(100, 999),
                         CreatedBy = Faker.Name.FullName()
@@ -198,7 +198,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
                         Id = _materialLogsInMemoryProvider.GenerateEntityId(),
                         Description = string.Join(" ", Faker.Lorem.Words(3)),
                         Quantity = Faker.RandomNumber.Next(1, 300),
-                        DateCreated = new DateTime(2020, 10, Faker.RandomNumber.Next(1, 30)),
+                        DateCreated = new DateTime(2020, 10, Faker.RandomNumber.Next(1, 29)),
                         DateUpdated = new DateTime(2020, 11, 27),
 
                         IsMagnet = false,
@@ -212,13 +212,13 @@ namespace Niagara.Data.InMemory.InMemoryStorage
                         TotalFT = Faker.RandomNumber.Next(100, 1000),
 
                         PONumber = $"PO{Faker.RandomNumber.Next(1000, 9999)}",
-                        UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities, (i + 1) * 13),
-                        PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities, (i + 1) * 17),
+                        UnitOfMeasureId = GetAnyEntityId(_unitOfMeasureInMemoryProvider.Entities),
+                        PartNumberId = GetAnyEntityId(_partNumberInMemoryProvider.Entities),
                         IsAvailable = Faker.Boolean.Random(),
-                        SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities, (i + 1) * 19),
+                        SupplierId = GetAnyEntityId(_supplierInMemoryProvider.Entities),
                         IsDFARS = Faker.Boolean.Random(),
                         PrimaryLocation = Faker.Country.Name(),
-                        MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities, (i + 1) * 23),
+                        MaterialLogTypeId = GetAnyEntityId(_materialLogTypeInMemoryProvider.Entities),
                         SupplierMaterialGrade = string.Join(" ", Faker.Lorem.Words(3)),
                         MRTNumber = Faker.RandomNumber.Next(100, 999),
                         CreatedBy = Faker.Name.FullName()
@@ -233,15 +233,15 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             for (var i = 0; i < count; i++)
             {
                 var day = Faker.RandomNumber.Next(1, 30);
-                var hour = Faker.RandomNumber.Next(1, 24);
-                var minute = Faker.RandomNumber.Next(1, 60);
-                var second = Faker.RandomNumber.Next(1, 60);
+                var hour = Faker.RandomNumber.Next(1, 23);
+                var minute = Faker.RandomNumber.Next(1, 59);
+                var second = Faker.RandomNumber.Next(1, 59);
 
                 _materialLogNoteInMemoryProvider.Entities.Add(
                     new MaterialLogNote
                     {
                         Id = _materialLogNoteInMemoryProvider.GenerateEntityId(),
-                        MaterialLogId = GetAnyMaterialLogId(_materialLogsInMemoryProvider.Entities, (i + 1) * 2),
+                        MaterialLogId = GetAnyMaterialLogId(_materialLogsInMemoryProvider.Entities),
                         Text = Faker.Lorem.Sentence(3),
                         DateTimeCreated = new DateTime(2020, 11, day, hour, minute, second),
                         CreatedBy = Faker.Name.FullName()
@@ -249,17 +249,17 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             }
         }
 
-        private int GetAnyEntityId<TEntity>(List<TEntity> entities, int seed)
+        private int GetAnyEntityId<TEntity>(List<TEntity> entities)
             where TEntity : IEntity<int>
         {
-            var index = new Random(seed).Next(0, entities.Count);
+            var index = Faker.RandomNumber.Next(0, entities.Count - 1);
 
             return entities[index].Id;
         }
 
-        private string GetAnyMaterialLogId(List<MaterialLog> entities, int seed)
+        private string GetAnyMaterialLogId(List<MaterialLog> entities)
         {
-            var index = new Random(seed).Next(0, entities.Count);
+            var index = Faker.RandomNumber.Next(0, entities.Count - 1);
 
             return entities[index].Id;
         }

@@ -397,37 +397,56 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-simple-table>
-            <template>
-              <thead>
-                <tr>
-                  <th class="text-left">
-                    Date
-                  </th>
-                  <th class="text-left">
-                    Time
-                  </th>
-                  <th class="text-left">
-                    Author
-                  </th>
-                  <th class="text-left">
-                    Note
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="note in notes"
-                  :key="note.id"
-                >
-                  <td>{{ note.dateCreated }}</td>
-                  <td>{{ note.timeCreated }}</td>
-                  <td>{{ note.createdBy }}</td>
-                  <td>{{ note.text }}</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+          <v-expansion-panels>
+            <v-expansion-panel>
+              <v-expansion-panel-header>
+                <strong>
+                  <v-icon left>
+                    mdi-notebook-edit
+                  </v-icon>
+                  Notes
+                </strong>
+                <template v-slot:actions>
+                  <v-icon color="primary">
+                    $expand
+                  </v-icon>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-simple-table>
+                  <template>
+                    <thead>
+                      <tr>
+                        <th class="text-left">
+                          Date
+                        </th>
+                        <th class="text-left">
+                          Time
+                        </th>
+                        <th class="text-left">
+                          Author
+                        </th>
+                        <th class="text-left">
+                          Note
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="note in notes"
+                        :key="note.id"
+                      >
+                        <td>{{ note.dateCreated }}</td>
+                        <td>{{ note.timeCreated }}</td>
+                        <td>{{ note.createdBy }}</td>
+                        <td>{{ note.text }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-col>
       </v-row>
       <v-row>

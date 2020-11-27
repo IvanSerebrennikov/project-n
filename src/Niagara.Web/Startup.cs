@@ -84,8 +84,11 @@ namespace Niagara.Web
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Niagara Web API v1");
             });
 
-            app.UseHttpsRedirection();
-
+            if (!env.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
+            
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 

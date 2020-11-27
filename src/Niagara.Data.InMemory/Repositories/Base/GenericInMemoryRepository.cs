@@ -18,7 +18,7 @@ namespace Niagara.Data.InMemory.Repositories.Base
 
         public virtual TEntity GetById(TEntityKeyType id)
         {
-            return Provider.Entities.FirstOrDefault(x => x.Id.ToString() == id.ToString());
+            return Provider.Entities.FirstOrDefault(x => x.Id?.ToString() == id?.ToString());
         }
 
         public virtual IReadOnlyList<TEntity> GetAll()

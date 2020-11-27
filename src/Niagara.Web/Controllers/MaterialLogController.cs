@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Niagara.Domain.Models;
 using Niagara.Domain.Services.Interfaces;
+using Niagara.Web.Models;
 
 namespace Niagara.Web.Controllers
 {
@@ -60,24 +61,56 @@ namespace Niagara.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(MaterialLogModel model)
+        public IActionResult Create(MaterialLogSaveRequest request)
         {
-            var createdMaterialLogModel = _materialLogService.Create(model);
+            var materialLogModel = request.MaterialLog;
 
-            return Ok(createdMaterialLogModel);
+            materialLogModel.DefaultProperties.PartNumberId =
+                GetPartNumberIdWithCreateNewOneIfNeeded(request.PartNumber);
+            materialLogModel.DefaultProperties.SupplierId =
+                GetSupplierIdWithCreateNewOneIfNeeded(request.Supplier);
+
+            var createdMaterialLogModel = _materialLogService.Create(materialLogModel);
+
+            return Ok(createdMaterialLogModel.DefaultProperties.LotNumber);
         }
 
         [HttpPut]
-        public IActionResult Update(MaterialLogModel model)
+        public IActionResult Update(MaterialLogSaveRequest request)
         {
-            var updatedMaterialLogModel = _materialLogService.Update(model);
+            var materialLogModel = request.MaterialLog;
+
+            materialLogModel.DefaultProperties.PartNumberId =
+                GetPartNumberIdWithCreateNewOneIfNeeded(request.PartNumber);
+            materialLogModel.DefaultProperties.SupplierId =
+                GetSupplierIdWithCreateNewOneIfNeeded(request.Supplier);
+
+            var updatedMaterialLogModel = _materialLogService.Update(materialLogModel);
 
             if (updatedMaterialLogModel == null)
             {
                 return BadRequest("Material Log was not found.");
             }
 
-            return Ok(updatedMaterialLogModel);
+            return Ok();
+        }
+
+        private int GetPartNumberIdWithCreateNewOneIfNeeded(string partNumberValue)
+        {
+            var partNumber =
+                _selectableOptionService.GetPartNumberByValue(partNumberValue) ??
+                _selectableOptionService.CreatePartNumber(partNumberValue);
+
+            return partNumber.Id;
+        }
+
+        private int GetSupplierIdWithCreateNewOneIfNeeded(string supplierValue)
+        {
+            var supplier =
+                _selectableOptionService.GetPartNumberByValue(supplierValue) ??
+                _selectableOptionService.CreatePartNumber(supplierValue);
+
+            return supplier.Id;
         }
     }
 }

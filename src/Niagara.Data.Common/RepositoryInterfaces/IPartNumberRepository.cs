@@ -5,5 +5,6 @@ namespace Niagara.Data.Common.RepositoryInterfaces
 {
     public interface IPartNumberRepository : IRepository<PartNumber, int>
     {
+        PartNumber GetByValue(string value);
     }
 }

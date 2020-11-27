@@ -337,7 +337,20 @@
       </v-row>
       <v-row>
         <v-col>
-          
+          Notes
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-btn
+            color="success"
+            @click="saveMaterialLog"
+          >
+            <v-icon left>
+              mdi-content-save
+            </v-icon>
+            Save
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -391,11 +404,39 @@ export default {
       if (!existingSupplier) {
         this.supplierOptions.unshift(selectedValue);
       }
+    },
+    saveMaterialLog: function() {
+      var vm = this;
+
+      const requestData = {
+        materialLog: vm.materialLog,
+        partNumber: vm.partNumber,
+        supplier: vm.supplier
+      };
+
+      function create() {
+        vm.axios.post(`/api/MaterialLog`, requestData).then((response) => {
+          console.log(response);
+          const lotNumber = response.data;
+          vm.materialLog.defaultProperties.lotNumber = lotNumber;
+          vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: lotNumber }});
+        });
+      }
+
+      function update() {
+        vm.axios.put(`/api/MaterialLog`, requestData).then((response) => {
+          console.log(response);
+        });
+      }
+
+      if (vm.materialLog.defaultProperties.lotNumber) {
+        update();
+      } else {
+        create();
+      }
     }
   },
   mounted: function() {
-    console.log(this.lotNumber);
-
     const vm = this;
 
     function getMaterialLog() {
@@ -442,13 +483,25 @@ export default {
         vm.materialLog.defaultProperties.supplierId = 0;
     }
 
-    Promise.all([getMaterialLog(), getSelectableOptions()])
+    const promises = [
+      getSelectableOptions()
+    ];
+
+    if (vm.lotNumber != 'new') {
+      promises.push(getMaterialLog());
+    }
+
+    Promise.all(promises)
       .then(function() {
         console.log(vm.materialLog);
         console.log(vm.selectableOptions);
 
         initPartNumbersCombobox();
         initSupplierCombobox();
+
+        if (vm.materialLog.isMagnet === null) {
+          vm.materialLog.isMagnet = true;
+        }
       });
   }
 }

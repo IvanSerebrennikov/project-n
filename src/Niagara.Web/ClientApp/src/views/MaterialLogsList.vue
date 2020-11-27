@@ -1,5 +1,18 @@
 <template>
   <div class="material-logs-list">
+    <v-row>
+      <v-col class="pl-6">
+        <v-btn
+          color="success"
+          @click="goToMaterialLogForm('new')"
+        >
+          <v-icon left>
+            mdi-pencil-plus
+          </v-icon>
+          New
+        </v-btn>
+      </v-col>
+    </v-row>
     <v-simple-table>
       <template v-slot:default>
         <thead>
@@ -35,17 +48,15 @@
               {{ materialLog.quantity }}
             </td>
             <td>
-              <router-link :to="{ name: 'MaterialLog', params: { lotNumber: materialLog.lotNumber }}">
-                <v-btn
-                  tile
-                  color="primary"
-                >
-                  <v-icon left>
-                    mdi-open-in-app
-                  </v-icon>
-                  Open
-                </v-btn>
-              </router-link>
+              <v-btn
+                color="primary"
+                @click="goToMaterialLogForm(materialLog.lotNumber)"
+              >
+                <v-icon left>
+                  mdi-open-in-app
+                </v-icon>
+                Open
+              </v-btn>
             </td>
           </tr>
         </tbody>
@@ -61,6 +72,11 @@ export default {
     return {
       materialLogs: []
     };
+  },
+  methods: {
+    goToMaterialLogForm: function(lotNumber) {
+      this.$router.push({ name: 'MaterialLog', params: { lotNumber: lotNumber }});
+    }
   },
   mounted: function() {
     this.axios.get('/api/MaterialLog/all').then((response) => {

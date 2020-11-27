@@ -5,5 +5,6 @@ namespace Niagara.Data.Common.RepositoryInterfaces
 {
     public interface ISupplierRepository : IRepository<Supplier, int>
     {
+        Supplier GetByValue(string value);
     }
 }

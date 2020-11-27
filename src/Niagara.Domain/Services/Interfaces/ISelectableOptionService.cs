@@ -10,12 +10,16 @@ namespace Niagara.Domain.Services.Interfaces
 
         IReadOnlyList<SelectableOptionModel> GetPartNumbers();
 
-        SelectableOptionModel CreatePartNumber(SelectableOptionModel model);
+        SelectableOptionModel GetPartNumberByValue(string value);
+
+        SelectableOptionModel CreatePartNumber(string value);
 
 
         IReadOnlyList<SelectableOptionModel> GetSuppliers();
 
-        SelectableOptionModel CreateSupplier(SelectableOptionModel model);
+        SelectableOptionModel GetSupplierByValue(string value);
+
+        SelectableOptionModel CreateSupplier(string value);
 
 
         IReadOnlyList<SelectableOptionModel> GetShapes();

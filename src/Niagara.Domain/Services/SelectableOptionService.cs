@@ -42,11 +42,17 @@ namespace Niagara.Domain.Services
             return _partNumberRepository.GetAll().Select(x => x.ToModel()).ToList();
         }
 
-        public SelectableOptionModel CreatePartNumber(SelectableOptionModel model)
+        public SelectableOptionModel GetPartNumberByValue(string value)
         {
-            var entity = new PartNumber();
+            return _partNumberRepository.GetByValue(value).ToModel();
+        }
 
-            entity.MapFromModel(model);
+        public SelectableOptionModel CreatePartNumber(string value)
+        {
+            var entity = new PartNumber
+            {
+                Value = value
+            };
 
             _partNumberRepository.Create(entity);
 
@@ -59,11 +65,17 @@ namespace Niagara.Domain.Services
             return _supplierRepository.GetAll().Select(x => x.ToModel()).ToList();
         }
 
-        public SelectableOptionModel CreateSupplier(SelectableOptionModel model)
+        public SelectableOptionModel GetSupplierByValue(string value)
         {
-            var entity = new Supplier();
+            return _supplierRepository.GetByValue(value).ToModel();
+        }
 
-            entity.MapFromModel(model);
+        public SelectableOptionModel CreateSupplier(string value)
+        {
+            var entity = new Supplier
+            {
+                Value = value
+            };
 
             _supplierRepository.Create(entity);
 

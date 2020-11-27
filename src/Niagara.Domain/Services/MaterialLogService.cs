@@ -38,9 +38,11 @@ namespace Niagara.Domain.Services
             var entity = new MaterialLog();
 
             entity.MapFromModel(model);
-            entity.CreatedBy = "LoggedIn User";
             entity.DateCreated = DateTime.Now.Date;
 
+            entity.PONumber = $"PO{new Random(1000).Next(1000, 9999)}"; // temp
+            entity.CreatedBy = "LoggedIn User"; // temp
+            
             _repository.Create(entity);
 
             return entity.ToModel();

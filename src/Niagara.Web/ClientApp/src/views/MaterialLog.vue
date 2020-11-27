@@ -414,22 +414,64 @@
                 </v-row>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-fade-transition>
-                  <v-btn
-                    v-show="notesExpanded"
-                    color="success"
-                    fab
-                    dark
-                    small
-                    absolute
-                    top
-                    left
-                    @click.prevent="openAddNoteDialog"
-                  >
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-                </v-fade-transition>
-                
+                <v-dialog
+                  v-model="addNoteDialog"
+                  width="500"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-fab-transition>
+                      <v-btn
+                        v-show="notesExpanded"
+                        v-bind="attrs"
+                        v-on="on"
+                        color="success"
+                        fab
+                        dark
+                        small
+                        absolute
+                        top
+                        left
+                      >
+                        <v-icon>mdi-plus</v-icon>
+                      </v-btn>
+                    </v-fab-transition>
+                  </template>
+                  <v-card>
+                    <v-card-title class="headline">
+                      Add new Note
+                    </v-card-title>
+                    <v-card-text>
+                      <v-textarea
+                        outlined
+                        label="Note"
+                      ></v-textarea>
+                    </v-card-text>
+                    <v-divider></v-divider>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        color="primary"
+                        class="pr-3"
+                        @click="addNoteDialog = false"
+                      >
+                        <v-icon left>
+                          mdi-close-circle
+                        </v-icon>
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        color="success"
+                        class="pr-3"
+                        @click="addNoteDialog = false"
+                      >
+                        <v-icon left>
+                          mdi-notebook-check
+                        </v-icon>
+                        Add
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
                 <v-simple-table>
                   <template>
                     <thead>
@@ -530,6 +572,7 @@ export default {
       },
       notes: [],
       notesExpanded: false,
+      addNoteDialog: false,
       partNumberOptions: [],
       partNumber: null,
       partNumberSearch: null,
@@ -579,9 +622,6 @@ export default {
       this.materialLog.dimensions.dim1 = null;
       this.materialLog.dimensions.dim2 = null;
       this.materialLog.dimensions.dimLm = null;
-    },
-    openAddNoteDialog: function() {
-
     },
     saveMaterialLog: function() {
       var vm = this;

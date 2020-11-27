@@ -398,21 +398,38 @@
       <v-row>
         <v-col>
           <v-expansion-panels>
-            <v-expansion-panel>
+            <v-expansion-panel
+              @change="notesExpanded = !notesExpanded"
+            >
               <v-expansion-panel-header>
-                <strong>
-                  <v-icon left>
-                    mdi-notebook-edit
-                  </v-icon>
-                  Notes
-                </strong>
-                <template v-slot:actions>
-                  <v-icon color="primary">
-                    $expand
-                  </v-icon>
-                </template>
+                <v-row no-gutters>
+                  <v-col>
+                    <strong class="text-uppercase grey--text text--darken-1">
+                      <v-icon left>
+                        mdi-notebook-edit
+                      </v-icon>
+                      Notes
+                    </strong>
+                  </v-col>
+                </v-row>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
+                <v-fade-transition>
+                  <v-btn
+                    v-show="notesExpanded"
+                    color="success"
+                    fab
+                    dark
+                    small
+                    absolute
+                    top
+                    left
+                    @click.prevent="openAddNoteDialog"
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </v-fade-transition>
+                
                 <v-simple-table>
                   <template>
                     <thead>
@@ -512,6 +529,7 @@ export default {
         materialLogTypes: []
       },
       notes: [],
+      notesExpanded: false,
       partNumberOptions: [],
       partNumber: null,
       partNumberSearch: null,
@@ -561,6 +579,9 @@ export default {
       this.materialLog.dimensions.dim1 = null;
       this.materialLog.dimensions.dim2 = null;
       this.materialLog.dimensions.dimLm = null;
+    },
+    openAddNoteDialog: function() {
+
     },
     saveMaterialLog: function() {
       var vm = this;

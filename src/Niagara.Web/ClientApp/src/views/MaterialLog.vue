@@ -421,7 +421,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-fab-transition>
                       <v-btn
-                        v-show="notesExpanded"
+                        v-show="notesExpanded && editMode"
                         v-bind="attrs"
                         v-on="on"
                         color="success"
@@ -443,6 +443,7 @@
                     <v-card-text>
                       <v-textarea
                         outlined
+                        v-model="newNoteText"
                         label="Note"
                       ></v-textarea>
                     </v-card-text>
@@ -462,7 +463,7 @@
                       <v-btn
                         color="success"
                         class="pr-3"
-                        @click="addNoteDialog = false"
+                        @click="addNote"
                       >
                         <v-icon left>
                           mdi-notebook-check
@@ -485,20 +486,37 @@
                         <th class="text-left">
                           Author
                         </th>
-                        <th class="text-left">
+                        <th class="text-left" colspan="2">
                           Note
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr
-                        v-for="note in notes"
+                        v-for="(note, index) in notes"
                         :key="note.id"
                       >
-                        <td>{{ note.dateCreated }}</td>
-                        <td>{{ note.timeCreated }}</td>
-                        <td>{{ note.createdBy }}</td>
-                        <td>{{ note.text }}</td>
+                        <template v-if="note.dateCreated">
+                          <td>{{ note.dateCreated }}</td>
+                          <td>{{ note.timeCreated }}</td>
+                          <td>{{ note.createdBy }}</td>
+                          <td colspan="2">{{ note.text }}</td>
+                        </template>
+                        <template v-else>
+                          <td colspan="3">
+                            <span class="grey--text text--darken-1">
+                              Save Material Log to receive date, time and author...
+                            </span>
+                          </td>
+                          <td>{{ note.text }}</td>
+                          <td style="width: 56px;">
+                            <v-icon
+                              @click="deleteNewNote(index)"
+                            >
+                              mdi-delete
+                            </v-icon>
+                          </td>
+                        </template>
                       </tr>
                     </tbody>
                   </template>
@@ -555,6 +573,7 @@ export default {
   data: function() {
     return {
       editMode: false,
+
       materialLog: {
         defaultProperties: {},
         isMagnet: null,
@@ -563,6 +582,7 @@ export default {
         specifications: {},
         bars: {}
       },
+
       selectableOptions: {
         unitOfMeasures: [],
         partNumbers: [],
@@ -570,15 +590,21 @@ export default {
         shapes: [],
         materialLogTypes: []
       },
+
       notes: [],
       notesExpanded: false,
       addNoteDialog: false,
+      newNoteText: null,
+      newNotes: [],
+
       partNumberOptions: [],
       partNumber: null,
       partNumberSearch: null,
+
       supplierOptions: [],
       supplier: null,
       supplierSearch: null,
+
       validationRules: {
         required: function(value) {
           if (value === null || value === undefined || !value.toString().trim()) {
@@ -623,6 +649,29 @@ export default {
       this.materialLog.dimensions.dim2 = null;
       this.materialLog.dimensions.dimLm = null;
     },
+    getNotes: function() {
+      const vm = this;
+      return vm.axios.get(`/api/MaterialLog/notes/${vm.lotNumber}`).then((response) => {
+        vm.notes = response.data;
+        vm.newNotes = [];
+      });
+    },
+    addNote: function() {
+      if (this.validationRules.required(this.newNoteText) !== true)
+        return;
+
+      this.newNotes.unshift(this.newNoteText);
+      this.notes.unshift({
+        text: this.newNoteText
+      });
+
+      this.addNoteDialog = false;
+      this.newNoteText = null;
+    },
+    deleteNewNote: function(index) {
+      this.newNotes.splice(index, 1);
+      this.notes.splice(index, 1);
+    },
     saveMaterialLog: function() {
       var vm = this;
 
@@ -634,7 +683,8 @@ export default {
       const requestData = {
         materialLog: vm.materialLog,
         partNumber: vm.partNumber,
-        supplier: vm.supplier
+        supplier: vm.supplier,
+        newNotes: vm.newNotes
       };
 
       function create() {
@@ -642,12 +692,14 @@ export default {
           console.log(response);
           vm.materialLog = response.data;
           vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: vm.materialLog.defaultProperties.lotNumber }});
+          vm.getNotes();
         });
       }
 
       function update() {
         vm.axios.put(`/api/MaterialLog`, requestData).then((response) => {
           console.log(response);
+          vm.getNotes();
         });
       }
 
@@ -670,12 +722,6 @@ export default {
     function getSelectableOptions() {
       return vm.axios.get(`/api/MaterialLog/selectableOptions`).then((response) => {
         vm.selectableOptions = response.data;
-      });
-    }
-
-    function getNotes() {
-      return vm.axios.get(`/api/MaterialLog/notes/${vm.lotNumber}`).then((response) => {
-        vm.notes = response.data;
       });
     }
 
@@ -717,7 +763,7 @@ export default {
 
     if (vm.lotNumber != 'new') {
       promises.push(getMaterialLog());
-      promises.push(getNotes());
+      promises.push(vm.getNotes());
     }
 
     Promise.all(promises)

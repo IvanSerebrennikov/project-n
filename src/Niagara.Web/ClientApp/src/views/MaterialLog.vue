@@ -484,7 +484,7 @@ export default {
       this.$refs.defaultPropertiesForm.resetValidation();
     },
     partNumberChanged: function(selectedValue) {
-      if (selectedValue === null || selectedValue === undefined || !selectedValue.toString().trim())
+      if (this.validationRules.required(selectedValue) !== true)
         return;
 
       const existingPartNumber = this.partNumberOptions.find(function(partNumber) {
@@ -496,6 +496,9 @@ export default {
       }
     },
     supplierChanged: function(selectedValue) {
+      if (this.validationRules.required(selectedValue) !== true)
+        return;
+      
       const existingSupplier = this.supplierOptions.find(function(supplier) {
           return supplier == selectedValue;
         });

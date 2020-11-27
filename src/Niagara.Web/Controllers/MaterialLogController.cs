@@ -107,8 +107,8 @@ namespace Niagara.Web.Controllers
         private int GetSupplierIdWithCreateNewOneIfNeeded(string supplierValue)
         {
             var supplier =
-                _selectableOptionService.GetPartNumberByValue(supplierValue) ??
-                _selectableOptionService.CreatePartNumber(supplierValue);
+                _selectableOptionService.GetSupplierByValue(supplierValue) ??
+                _selectableOptionService.CreateSupplier(supplierValue);
 
             return supplier.Id;
         }

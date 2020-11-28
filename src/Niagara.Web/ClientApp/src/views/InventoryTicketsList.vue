@@ -14,6 +14,7 @@
         </v-btn>
         <v-btn
           color="success"
+          @click="goToInventoryTicketForm('new')"
         >
           <v-icon left>
             mdi-pencil-plus
@@ -65,6 +66,7 @@
             <td>
               <v-btn
                 color="primary"
+                @click="goToInventoryTicketForm(inventoryMaterialTicket.id)"
               >
                 <v-icon left>
                   mdi-open-in-app
@@ -91,6 +93,9 @@ export default {
   methods: {
     goBackToMaterialLog: function() {
       this.$router.push({ name: 'MaterialLog', params: { lotNumber: this.lotNumber }});
+    },
+    goToInventoryTicketForm: function(ticketId) {
+      this.$router.push({ name: 'InventoryTicket', params: { lotNumber: this.lotNumber, ticketId: ticketId }});
     }
   },
   mounted: function() {

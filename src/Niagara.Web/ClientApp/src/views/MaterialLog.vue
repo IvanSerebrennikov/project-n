@@ -668,7 +668,7 @@ export default {
   },
   methods: {
     goToMaterialTicketsList: function() {
-      this.$router.push({ name: 'MaterialTicketsList', params: { lotNumber: this.lotNumber }});
+      this.$router.push({ name: 'InventoryTicketsList', params: { lotNumber: this.lotNumber }});
     },
     switchEditMode: function() {
       this.editMode = !this.editMode;

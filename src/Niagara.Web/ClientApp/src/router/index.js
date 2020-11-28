@@ -30,9 +30,9 @@ const routes = [
     props: true
   },
   {
-    path: '/material-tickets/:lotNumber',
-    name: 'MaterialTicketsList',
-    component: () => import('../views/MaterialTicketsList.vue'),
+    path: '/inventory-tickets/:lotNumber',
+    name: 'InventoryTicketsList',
+    component: () => import('../views/InventoryTicketsList.vue'),
     props: true
   }
 ]

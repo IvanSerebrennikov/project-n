@@ -465,28 +465,25 @@
                 </v-row>
               </v-expansion-panel-header>
               <v-expansion-panel-content>
+                <v-fab-transition>
+                  <v-btn
+                    v-show="notesExpanded && editMode"
+                    @click="addNoteDialog = true"
+                    color="success"
+                    fab
+                    dark
+                    small
+                    absolute
+                    top
+                    left
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </v-fab-transition>
                 <v-dialog
                   v-model="addNoteDialog"
                   width="500"
                 >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-fab-transition>
-                      <v-btn
-                        v-show="notesExpanded && editMode"
-                        v-bind="attrs"
-                        v-on="on"
-                        color="success"
-                        fab
-                        dark
-                        small
-                        absolute
-                        top
-                        left
-                      >
-                        <v-icon>mdi-plus</v-icon>
-                      </v-btn>
-                    </v-fab-transition>
-                  </template>
                   <v-card>
                     <v-card-title class="headline">
                       Add new Note

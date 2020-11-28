@@ -1,10 +1,11 @@
 <template>
   <div>
     <v-container>
-      <v-row>
+      <v-row v-if="!isNew">
         <v-col>
           <v-btn
             color="secondary"
+            @click="goToMaterialTicketsList"
           >
             <v-icon left>
               mdi-card-bulleted-outline
@@ -664,6 +665,9 @@ export default {
     }
   },
   methods: {
+    goToMaterialTicketsList: function() {
+      this.$router.push({ name: 'MaterialTicketsList', params: { lotNumber: this.lotNumber }});
+    },
     switchEditMode: function() {
       this.editMode = !this.editMode;
       this.$refs.defaultPropertiesForm.resetValidation();

@@ -1,5 +1,5 @@
 <template>
-  <div class="material-logs-list">
+  <div>
     <v-row>
       <v-col class="pl-6">
         <v-btn

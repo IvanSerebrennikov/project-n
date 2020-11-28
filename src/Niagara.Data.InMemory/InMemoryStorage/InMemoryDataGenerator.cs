@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Niagara.Data.Common.Entities;
 using Niagara.Data.Common.Entities.Base;
 using Niagara.Data.InMemory.InMemoryStorage.Providers;
@@ -15,6 +16,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
         private readonly SupplierInMemoryProvider _supplierInMemoryProvider;
         private readonly UnitOfMeasureInMemoryProvider _unitOfMeasureInMemoryProvider;
         private readonly MaterialLogNoteInMemoryProvider _materialLogNoteInMemoryProvider;
+        private readonly InventoryMaterialTicketInMemoryProvider _inventoryMaterialTicketInMemoryProvider;
 
         public InMemoryDataGenerator(
             MaterialLogInMemoryProvider materialLogsInMemoryProvider,
@@ -23,7 +25,8 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             ShapeInMemoryProvider shapeInMemoryProvider,
             SupplierInMemoryProvider supplierInMemoryProvider,
             UnitOfMeasureInMemoryProvider unitOfMeasureInMemoryProvider,
-            MaterialLogNoteInMemoryProvider materialLogNoteInMemoryProvider
+            MaterialLogNoteInMemoryProvider materialLogNoteInMemoryProvider,
+            InventoryMaterialTicketInMemoryProvider inventoryMaterialTicketInMemoryProvider
         )
         {
             _materialLogsInMemoryProvider = materialLogsInMemoryProvider;
@@ -33,6 +36,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             _supplierInMemoryProvider = supplierInMemoryProvider;
             _unitOfMeasureInMemoryProvider = unitOfMeasureInMemoryProvider;
             _materialLogNoteInMemoryProvider = materialLogNoteInMemoryProvider;
+            _inventoryMaterialTicketInMemoryProvider = inventoryMaterialTicketInMemoryProvider;
         }
 
         public void Generate()
@@ -46,6 +50,8 @@ namespace Niagara.Data.InMemory.InMemoryStorage
             GenerateMaterialLogs();
 
             GenerateMaterialLogNotes();
+
+            GenerateInventoryMaterialTickets();
         }
 
         private void GenerateUnitOfMeasures()
@@ -228,7 +234,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
 
         private void GenerateMaterialLogNotes()
         {
-            var count = 100;
+            var count = 150;
 
             for (var i = 0; i < count; i++)
             {
@@ -244,6 +250,31 @@ namespace Niagara.Data.InMemory.InMemoryStorage
                         MaterialLogId = GetAnyMaterialLogId(_materialLogsInMemoryProvider.Entities),
                         Text = Faker.Lorem.Sentence(3),
                         DateTimeCreated = new DateTime(2020, 11, day, hour, minute, second),
+                        CreatedBy = Faker.Name.FullName()
+                    });
+            }
+        }
+
+        private void GenerateInventoryMaterialTickets()
+        {
+            var count = 150;
+
+            for (var i = 0; i < count; i++)
+            {
+                var day = Faker.RandomNumber.Next(1, 30);
+
+                _inventoryMaterialTicketInMemoryProvider.Entities.Add(
+                    new InventoryMaterialTicket
+                    {
+                        Id = _inventoryMaterialTicketInMemoryProvider.GenerateEntityId(),
+                        MaterialLogId = GetAnyMaterialLogId(_materialLogsInMemoryProvider.Entities),
+                        JobTrackNumber = Faker.RandomNumber.Next(100, 999).ToString(),
+                        InventoryItem = string.Join(" ", Faker.Lorem.Words(2)),
+                        TicketNumber = Faker.RandomNumber.Next(10, 200).ToString(),
+                        MCE = Faker.Lorem.Words(1).FirstOrDefault(),
+                        QuantityToBeMade = Faker.RandomNumber.Next(5, 19),
+                        QuantityIssued = Faker.RandomNumber.Next(20, 50),
+                        DateCreated = new DateTime(2020, 11, day),
                         CreatedBy = Faker.Name.FullName()
                     });
             }

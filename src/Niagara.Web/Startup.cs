@@ -40,27 +40,10 @@ namespace Niagara.Web
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Niagara Web API", Version = "v1" });
             });
 
-            services.AddSingleton<MaterialLogInMemoryProvider>();
-            services.AddSingleton<MaterialLogTypeInMemoryProvider>();
-            services.AddSingleton<PartNumberInMemoryProvider>();
-            services.AddSingleton<ShapeInMemoryProvider>();
-            services.AddSingleton<SupplierInMemoryProvider>();
-            services.AddSingleton<UnitOfMeasureInMemoryProvider>();
-            services.AddSingleton<MaterialLogNoteInMemoryProvider>();
+            ConfigureInMemoryDataProviderServices(services);
+            ConfigureInMemoryDataServices(services);
 
-            services.AddSingleton<InMemoryDataGenerator>();
-
-            services.AddScoped<IMaterialLogRepository, MaterialLogInMemoryRepository>();
-            services.AddScoped<IMaterialLogTypeRepository, MaterialLogTypeInMemoryRepository>();
-            services.AddScoped<IPartNumberRepository, PartNumberInMemoryRepository>();
-            services.AddScoped<IShapeRepository, ShapeInMemoryRepository>();
-            services.AddScoped<ISupplierRepository, SupplierInMemoryRepository>();
-            services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureInMemoryRepository>();
-            services.AddScoped<IMaterialLogNoteRepository, MaterialLogNoteInMemoryRepository>();
-
-            services.AddScoped<IMaterialLogService, MaterialLogService>();
-            services.AddScoped<ISelectableOptionService, SelectableOptionService>();
-            services.AddScoped<IMaterialLogNoteService, MaterialLogNoteService>();
+            ConfigureDomainServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,5 +99,48 @@ namespace Niagara.Web
 
             inMemoryDataGenerator.Generate();
         }
+
+        #region private
+
+        private void ConfigureInMemoryDataProviderServices(IServiceCollection services)
+        {
+            services.AddSingleton<MaterialLogInMemoryProvider>();
+            services.AddSingleton<MaterialLogTypeInMemoryProvider>();
+            services.AddSingleton<PartNumberInMemoryProvider>();
+            services.AddSingleton<ShapeInMemoryProvider>();
+            services.AddSingleton<SupplierInMemoryProvider>();
+            services.AddSingleton<UnitOfMeasureInMemoryProvider>();
+            services.AddSingleton<MaterialLogNoteInMemoryProvider>();
+            services.AddSingleton<InventoryMaterialTicketInMemoryProvider>();
+
+            services.AddSingleton<InMemoryDataGenerator>();
+        }
+
+        private void ConfigureInMemoryDataServices(IServiceCollection services)
+        {
+            services.AddScoped<IMaterialLogRepository, MaterialLogInMemoryRepository>();
+            services.AddScoped<IMaterialLogTypeRepository, MaterialLogTypeInMemoryRepository>();
+            services.AddScoped<IPartNumberRepository, PartNumberInMemoryRepository>();
+            services.AddScoped<IShapeRepository, ShapeInMemoryRepository>();
+            services.AddScoped<ISupplierRepository, SupplierInMemoryRepository>();
+            services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureInMemoryRepository>();
+            services.AddScoped<IMaterialLogNoteRepository, MaterialLogNoteInMemoryRepository>();
+            services.AddScoped<IInventoryMaterialTicketRepository, InventoryMaterialTicketInMemoryRepository>();
+        }
+
+        private void ConfigureDatabaseDataServices(IServiceCollection services)
+        {
+
+        }
+
+        private void ConfigureDomainServices(IServiceCollection services)
+        {
+            services.AddScoped<IMaterialLogService, MaterialLogService>();
+            services.AddScoped<ISelectableOptionService, SelectableOptionService>();
+            services.AddScoped<IMaterialLogNoteService, MaterialLogNoteService>();
+            services.AddScoped<IInventoryMaterialTicketService, InventoryMaterialTicketService>();
+        }
+
+        #endregion
     }
 }

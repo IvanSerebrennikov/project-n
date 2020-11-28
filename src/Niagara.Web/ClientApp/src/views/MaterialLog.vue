@@ -45,6 +45,7 @@
                     label="Lot #"
                     outlined
                     readonly
+                    prepend-icon="mdi-table-key"
                     hint="Automatically generated"
                     persistent-hint
                     v-model="materialLog.defaultProperties.lotNumber"
@@ -119,6 +120,7 @@
                     label="PO #"
                     outlined
                     readonly
+                    prepend-icon="mdi-link-variant"
                     hint="Automatically generated"
                     persistent-hint
                     v-model="materialLog.defaultProperties.poNumber"

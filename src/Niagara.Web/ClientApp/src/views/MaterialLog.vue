@@ -1,6 +1,39 @@
 <template>
   <div>
     <v-container>
+      <v-row>
+        <v-col>
+          <v-btn
+            color="secondary"
+          >
+            <v-icon left>
+              mdi-card-bulleted-outline
+            </v-icon>
+            Inventory Material tickets
+          </v-btn>
+        </v-col>
+        <v-col>
+          <div class="text-right" style="min-width: 305px;">
+            <v-btn
+              color="info"
+              class="mr-3"
+            >
+              <v-icon left>
+                mdi-printer
+              </v-icon>
+              Print All
+            </v-btn>
+            <v-btn
+              color="info"
+            >
+              <v-icon left>
+                mdi-printer-pos
+              </v-icon>
+              Print Label
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
       <v-row class="mb-6">
         <v-col cols="12" lg="6">
           <v-form ref="defaultPropertiesForm">

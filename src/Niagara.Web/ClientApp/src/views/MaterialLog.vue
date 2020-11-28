@@ -702,7 +702,7 @@ export default {
     },
     getNotes: function() {
       const vm = this;
-      return vm.axios.get(`/api/MaterialLog/notes/${vm.lotNumber}`).then((response) => {
+      return vm.axios.get(`/api/MaterialLog/${vm.lotNumber}/notes`).then((response) => {
         vm.notes = response.data;
         vm.newNotes = [];
       });
@@ -765,7 +765,7 @@ export default {
     const vm = this;
 
     function getMaterialLog() {
-      return vm.axios.get(`/api/MaterialLog/single/${vm.lotNumber}`).then((response) => {
+      return vm.axios.get(`/api/MaterialLog/${vm.lotNumber}`).then((response) => {
         vm.materialLog = response.data;
       });
     }

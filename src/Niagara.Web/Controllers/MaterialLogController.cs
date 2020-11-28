@@ -16,24 +16,27 @@ namespace Niagara.Web.Controllers
         private readonly IMaterialLogService _materialLogService;
         private readonly ISelectableOptionService _selectableOptionService;
         private readonly IMaterialLogNoteService _materialLogNoteService;
+        private readonly IInventoryMaterialTicketService _inventoryMaterialTicketService;
 
         public MaterialLogController(
             IMaterialLogService materialLogService, 
             ISelectableOptionService selectableOptionService,
-            IMaterialLogNoteService materialLogNoteService)
+            IMaterialLogNoteService materialLogNoteService,
+            IInventoryMaterialTicketService inventoryMaterialTicketService)
         {
             _materialLogService = materialLogService;
             _selectableOptionService = selectableOptionService;
             _materialLogNoteService = materialLogNoteService;
+            _inventoryMaterialTicketService = inventoryMaterialTicketService;
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public IEnumerable<MaterialLogReducedModel> GetAll()
         {
             return _materialLogService.GetAllReduced();
         }
 
-        [HttpGet("single/{lotNumber}")]
+        [HttpGet("{lotNumber}")]
         public IActionResult Get(string lotNumber)
         {
             var materialLogModel = _materialLogService.GetByLotNumber(lotNumber);
@@ -65,7 +68,7 @@ namespace Niagara.Web.Controllers
             });
         }
 
-        [HttpGet("notes/{lotNumber}")]
+        [HttpGet("{lotNumber}/notes")]
         public IEnumerable<MaterialLogNoteModel> GetNotes(string lotNumber)
         {
             return _materialLogNoteService.GetAllByLotNumber(lotNumber);
@@ -106,6 +109,20 @@ namespace Niagara.Web.Controllers
             }
 
             CreateNotes(updatedMaterialLogModel.DefaultProperties.LotNumber, request.NewNotes);
+
+            return Ok();
+        }
+
+        [HttpGet("{lotNumber}/inventoryMaterialTickets")]
+        public IEnumerable<InventoryMaterialTicketModel> GetInventoryMaterialTickets(string lotNumber)
+        {
+            return _inventoryMaterialTicketService.GetAllByLotNumber(lotNumber);
+        }
+
+        [HttpPost("{lotNumber}/inventoryMaterialTickets")]
+        public IActionResult Create(InventoryMaterialTicketModel request)
+        {
+            
 
             return Ok();
         }

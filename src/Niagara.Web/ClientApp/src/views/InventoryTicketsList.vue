@@ -81,7 +81,7 @@
 
 <script>
 export default {
-  name: 'MaterialTicketsList',
+  name: 'InventoryTicketsList',
   props: ['lotNumber'],
   data: function() {
     return {
@@ -96,7 +96,7 @@ export default {
   mounted: function() {
     const vm = this;
 
-    this.axios.get(`/api/InventoryMaterialTicket/${vm.lotNumber}`).then((response) => {
+    this.axios.get(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets`).then((response) => {
       this.inventoryMaterialTickets = response.data;
     });
   }

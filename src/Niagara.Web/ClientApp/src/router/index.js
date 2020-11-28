@@ -24,15 +24,21 @@ const routes = [
     component: () => import('../views/MaterialLogsList.vue')
   },
   {
-    path: '/material-log/:lotNumber',
+    path: '/material-logs/:lotNumber',
     name: 'MaterialLog',
     component: () => import('../views/MaterialLog.vue'),
     props: true
   },
   {
-    path: '/inventory-tickets/:lotNumber',
+    path: '/material-logs/:lotNumber/inventory-tickets',
     name: 'InventoryTicketsList',
     component: () => import('../views/InventoryTicketsList.vue'),
+    props: true
+  },
+  {
+    path: '/material-logs/:lotNumber/inventory-tickets/:ticketId',
+    name: 'InventoryTicket',
+    component: () => import('../views/InventoryTicket.vue'),
     props: true
   }
 ]

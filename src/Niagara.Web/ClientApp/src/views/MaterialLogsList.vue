@@ -1,16 +1,18 @@
 <template>
-  <div>
+  <v-container>
     <v-row>
-      <v-col class="pl-6">
-        <v-btn
-          color="success"
-          @click="goToMaterialLogForm('new')"
-        >
-          <v-icon left>
-            mdi-pencil-plus
-          </v-icon>
-          New
-        </v-btn>
+      <v-col>
+        <div>
+          <v-btn
+            color="success"
+            @click="goToMaterialLogForm('new')"
+          >
+            <v-icon left>
+              mdi-pencil-plus
+            </v-icon>
+            New
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
     <v-simple-table>
@@ -62,7 +64,7 @@
         </tbody>
       </template>
     </v-simple-table>
-  </div>
+  </v-container>
 </template>
 
 <script>

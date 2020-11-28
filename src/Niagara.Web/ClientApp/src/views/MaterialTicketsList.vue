@@ -1,7 +1,17 @@
 <template>
-  <div>
+  <v-container>
     <v-row>
-      <v-col class="pl-6">
+      <v-col>
+        <v-btn
+          color="secondary"
+          class="mr-3"
+          @click="goBackToMaterialLog"
+        >
+          <v-icon left>
+            mdi-keyboard-backspace
+          </v-icon>
+          Back to {{ lotNumber }}
+        </v-btn>
         <v-btn
           color="success"
         >
@@ -66,7 +76,7 @@
         </tbody>
       </template>
     </v-simple-table>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -79,7 +89,9 @@ export default {
     };
   },
   methods: {
-    
+    goBackToMaterialLog: function() {
+      this.$router.push({ name: 'MaterialLog', params: { lotNumber: this.lotNumber }});
+    }
   },
   mounted: function() {
     const vm = this;

@@ -33,6 +33,11 @@ namespace Niagara.Domain.Services
             return _repository.GetAllReduced().OrderByDescending(x => x.DateCreated).Select(x => x.ToReducedModel()).ToList();
         }
 
+        public int Count()
+        {
+            return _repository.Count();
+        }
+
         public MaterialLogModel Create(MaterialLogModel model)
         {
             var entity = new MaterialLog();

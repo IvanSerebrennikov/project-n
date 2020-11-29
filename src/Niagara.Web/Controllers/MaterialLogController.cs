@@ -31,9 +31,15 @@ namespace Niagara.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<MaterialLogReducedModel> GetAll()
+        public IEnumerable<MaterialLogReducedModel> GetAll(int? skip = null, int? take = null)
         {
             return _materialLogService.GetAllReduced();
+        }
+
+        [HttpGet("count")]
+        public int GetCount()
+        {
+            return _materialLogService.Count();
         }
 
         [HttpGet("{lotNumber}")]

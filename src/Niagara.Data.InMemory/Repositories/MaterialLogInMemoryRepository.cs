@@ -24,5 +24,10 @@ namespace Niagara.Data.InMemory.Repositories
                 DateCreated = x.DateCreated
             }).ToList();
         }
+
+        public int Count()
+        {
+            return Provider.Entities.Count;
+        }
     }
 }

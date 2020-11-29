@@ -64,6 +64,14 @@
         </tbody>
       </template>
     </v-simple-table>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="pagesCount"
+        :total-visible="7"
+        @input="getMaterialLogs"
+      ></v-pagination>
+    </div>
   </v-container>
 </template>
 
@@ -72,18 +80,37 @@ export default {
   name: 'MaterialLogsList',
   data: function() {
     return {
-      materialLogs: []
+      materialLogs: [],
+      page: 1,
+      pagesCount: 0
     };
   },
   methods: {
     goToMaterialLogForm: function(lotNumber) {
       this.$router.push({ name: 'MaterialLog', params: { lotNumber: lotNumber }});
+    },
+    getMaterialLogsCount: function() {
+      return this.axios.get(`/api/MaterialLog/count`).then((response) => {
+        return response.data;
+      });
+    },
+    getMaterialLogs: async function() {
+      const vm = this;
+
+      const take = 15;
+      const skip = (vm.page - 1) * take;
+
+      const materialLogsCount = await vm.getMaterialLogsCount();
+
+      vm.pagesCount = Math.ceil(materialLogsCount / take);
+
+      return vm.axios.get(`/api/MaterialLog?skip=${skip}&take=${take}`).then((response) => {
+        vm.materialLogs = response.data;
+      });
     }
   },
   mounted: function() {
-    this.axios.get('/api/MaterialLog').then((response) => {
-      this.materialLogs = response.data;
-    });
+    this.getMaterialLogs();
   }
 }
 </script>

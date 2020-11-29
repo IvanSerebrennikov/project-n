@@ -11,6 +11,8 @@ namespace Niagara.Domain.Services.Interfaces
 
         IReadOnlyList<MaterialLogReducedModel> GetAllReduced();
 
+        int Count();
+
         MaterialLogModel Create(MaterialLogModel model);
 
         /// <summary>

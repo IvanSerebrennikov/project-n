@@ -94,16 +94,16 @@ export default {
         return response.data;
       });
     },
-    getMaterialLogs: async function() {
+    getMaterialLogs: function() {
       const vm = this;
 
       const take = 15;
       const skip = (vm.page - 1) * take;
 
-      const materialLogsCount = await vm.getMaterialLogsCount();
-
-      vm.pagesCount = Math.ceil(materialLogsCount / take);
-
+      vm.getMaterialLogsCount().then((materialLogsCount) => {
+        vm.pagesCount = Math.ceil(materialLogsCount / take);
+      });
+      
       return vm.axios.get(`/api/MaterialLog?skip=${skip}&take=${take}`).then((response) => {
         vm.materialLogs = response.data;
       });

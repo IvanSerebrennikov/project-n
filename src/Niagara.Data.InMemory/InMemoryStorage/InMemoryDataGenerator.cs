@@ -257,7 +257,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
 
         private void GenerateInventoryMaterialTickets()
         {
-            var count = 1500;
+            var count = 3000;
 
             for (var i = 0; i < count; i++)
             {

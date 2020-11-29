@@ -7,7 +7,7 @@ namespace Niagara.Data.Common.RepositoryInterfaces
 {
     public interface IMaterialLogRepository : IRepository<MaterialLog, string>
     {
-        IReadOnlyList<MaterialLogProjection> GetAllReduced();
+        IReadOnlyList<MaterialLogProjection> GetAllReduced(int? skip = null, int? take = null);
 
         int Count();
     }

@@ -28,9 +28,10 @@ namespace Niagara.Domain.Services
             return _repository.GetAll().OrderByDescending(x => x.DateCreated).Select(x => x.ToModel()).ToList();
         }
 
-        public IReadOnlyList<MaterialLogReducedModel> GetAllReduced()
+        public IReadOnlyList<MaterialLogReducedModel> GetAllReduced(int? skip = null, int? take = null)
         {
-            return _repository.GetAllReduced().OrderByDescending(x => x.DateCreated).Select(x => x.ToReducedModel()).ToList();
+            return _repository.GetAllReduced(skip, take)
+                .Select(x => x.ToReducedModel()).ToList();
         }
 
         public int Count()

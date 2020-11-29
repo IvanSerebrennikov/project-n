@@ -33,7 +33,7 @@ namespace Niagara.Web.Controllers
         [HttpGet]
         public IEnumerable<MaterialLogReducedModel> GetAll(int? skip = null, int? take = null)
         {
-            return _materialLogService.GetAllReduced();
+            return _materialLogService.GetAllReduced(skip, take);
         }
 
         [HttpGet("count")]

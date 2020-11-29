@@ -14,15 +14,27 @@ namespace Niagara.Data.InMemory.Repositories
         {
         }
 
-        public IReadOnlyList<MaterialLogProjection> GetAllReduced()
+        public IReadOnlyList<MaterialLogProjection> GetAllReduced(int? skip = null, int? take = null)
         {
-            return Provider.Entities.Select(x => new MaterialLogProjection
+            var entities = Provider.Entities.Select(x => new MaterialLogProjection
             {
                 Id = x.Id,
                 Description = x.Description,
                 Quantity = x.Quantity,
                 DateCreated = x.DateCreated
-            }).ToList();
+            }).OrderByDescending(x => x.DateCreated).AsEnumerable();
+
+            if (skip != null)
+            {
+                entities = entities.Skip(skip.Value);
+            }
+
+            if (take != null)
+            {
+                entities = entities.Take(take.Value);
+            }
+
+            return entities.ToList();
         }
 
         public int Count()

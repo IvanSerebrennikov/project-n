@@ -9,7 +9,7 @@ namespace Niagara.Domain.Services.Interfaces
 
         IReadOnlyList<MaterialLogModel> GetAll();
 
-        IReadOnlyList<MaterialLogReducedModel> GetAllReduced();
+        IReadOnlyList<MaterialLogReducedModel> GetAllReduced(int? skip = null, int? take = null);
 
         int Count();
 

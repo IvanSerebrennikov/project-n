@@ -162,7 +162,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
 
         private void GenerateMaterialLogs()
         {
-            var count = 15;
+            var count = 300;
 
             for (var i = 0; i < count; i++)
             {
@@ -234,7 +234,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
 
         private void GenerateMaterialLogNotes()
         {
-            var count = 150;
+            var count = 3000;
 
             for (var i = 0; i < count; i++)
             {
@@ -257,7 +257,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
 
         private void GenerateInventoryMaterialTickets()
         {
-            var count = 150;
+            var count = 1500;
 
             for (var i = 0; i < count; i++)
             {

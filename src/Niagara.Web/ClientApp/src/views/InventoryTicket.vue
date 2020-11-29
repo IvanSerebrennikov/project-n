@@ -203,11 +203,23 @@ export default {
         return;
 
       function create() {
-        vm.axios.post(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets`, vm.inventoryTicket).then((response) => {
-          console.log(response);
-          vm.inventoryTicket = response.data;
-          vm.$router.replace({ name: 'InventoryTicket', params: { lotNumber: vm.lotNumber, ticketId: vm.inventoryTicket.id }});
-        });
+        vm.axios.post(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets`, vm.inventoryTicket)
+          .then((response) => {
+            console.log(response);
+            vm.inventoryTicket = response.data;
+            vm.$router.replace({ name: 'InventoryTicket', params: { lotNumber: vm.lotNumber, ticketId: vm.inventoryTicket.id }});
+          })
+          .catch(error => {
+            console.log(error);
+            if (error.response) {
+              console.log(error.response.data);
+              console.log(error.response.status);
+            } else if (error.request) {
+              console.log(error.request);
+            } else {
+              console.log('Error', error.message);
+            }
+          });
       }
 
       create();

@@ -140,7 +140,24 @@ namespace Niagara.Web.Controllers
         [HttpPost("{lotNumber}/inventoryMaterialTickets")]
         public IActionResult Create(InventoryMaterialTicketModel model)
         {
+            var materialLogModel = _materialLogService.GetByLotNumber(model.MaterialLogLotNumber);
+
+            if (materialLogModel == null)
+            {
+                return BadRequest("Related Material Log was not found.");
+            }
+
+            if (materialLogModel.DefaultProperties.Quantity < model.QuantityIssued)
+            {
+                return BadRequest(
+                    $"Related Material Log has only {materialLogModel.DefaultProperties.Quantity} quantity.");
+            }
+
             var createdInventoryMaterialTicket = _inventoryMaterialTicketService.Create(model);
+
+            materialLogModel.DefaultProperties.Quantity -= model.QuantityIssued;
+
+            _materialLogService.Update(materialLogModel);
 
             return Ok(createdInventoryMaterialTicket);
         }

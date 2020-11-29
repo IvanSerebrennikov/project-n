@@ -35,15 +35,16 @@
           </div>
         </v-col>
       </v-row>
-      <v-row class="mb-6">
+      <v-row>
         <v-col cols="12" lg="6">
           <v-form ref="defaultPropertiesForm">
             <v-container>
               <v-row>
-                <v-col>
+                <v-col class="py-0">
                   <v-text-field
                     label="Lot #"
                     outlined
+                    dense
                     readonly
                     prepend-icon="mdi-table-key"
                     hint="Automatically generated"
@@ -51,10 +52,11 @@
                     v-model="materialLog.defaultProperties.lotNumber"
                   ></v-text-field>
                 </v-col>
-                <v-col>
+                <v-col class="py-0">
                   <v-combobox
                     v-model="partNumber"
                     outlined
+                    dense
                     :items="partNumberOptions"
                     :search-input.sync="partNumberSearch"
                     :readonly="!editMode"
@@ -75,26 +77,29 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="pb-2 pt-0">
                   <v-switch
                     v-model="materialLog.isMagnet"
+                    dense
                     :readonly="!editMode"
                     label="Magnet"
                   ></v-switch>
                 </v-col>
-                <v-col>
+                <v-col class="pb-2 pt-0">
                   <v-checkbox
                     label="Available"
+                    dense
                     :readonly="!editMode"
                     v-model="materialLog.defaultProperties.isAvailable"
                   ></v-checkbox>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="py-2">
                   <v-combobox
                     v-model="supplier"
                     outlined
+                    dense
                     :items="supplierOptions"
                     :search-input.sync="supplierSearch"
                     :readonly="!editMode"
@@ -115,10 +120,11 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="pb-3 pt-0">
                   <v-text-field
                     label="PO #"
                     outlined
+                    dense
                     readonly
                     prepend-icon="mdi-link-variant"
                     hint="Automatically generated"
@@ -126,19 +132,21 @@
                     v-model="materialLog.defaultProperties.poNumber"
                   ></v-text-field>
                 </v-col>
-                <v-col>
+                <v-col class="pb-3 pt-0">
                   <v-checkbox
                     label="DFARS"
+                    dense
                     :readonly="!editMode"
                     v-model="materialLog.defaultProperties.isDFARS"
                   ></v-checkbox>
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="py-2">
                   <v-text-field
                     label="Description"
                     outlined
+                    dense
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.description"
@@ -146,22 +154,24 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="py-2">
                   <v-text-field
                     label="Qty"
                     type="number"
                     :readonly="!editMode || !isNew"
                     outlined
+                    dense
                     :hint="!isNew ? 'Can\'t be changed' : ''"
                     persistent-hint
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.quantity"
                   ></v-text-field>
                 </v-col>
-                <v-col>
+                <v-col class="py-2">
                   <v-text-field
                     label="Primary Location"
                     outlined
+                    dense
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.primaryLocation"
@@ -169,19 +179,21 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="py-2">
                   <v-text-field
                     label="Supplier Material Grade"
                     outlined
+                    dense
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
                     v-model="materialLog.defaultProperties.supplierMaterialGrade"
                   ></v-text-field>
                 </v-col>
-                <v-col>
+                <v-col class="py-2">
                   <v-text-field
                     label="MRT #"
                     outlined
+                    dense
                     type="number"
                     :readonly="!editMode"
                     :rules="[validationRules.required]"
@@ -190,10 +202,11 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="py-2">
                   <v-select
                     v-model="materialLog.defaultProperties.unitOfMeasureId"
                     outlined
+                    dense
                     :items="selectableOptions.unitOfMeasures"
                     item-text="value"
                     item-value="id"
@@ -202,10 +215,11 @@
                     label="U/M"
                   ></v-select>
                 </v-col>
-                <v-col>
+                <v-col class="py-2">
                   <v-select
                     v-model="materialLog.defaultProperties.materialLogTypeId"
                     outlined
+                    dense
                     :items="selectableOptions.materialLogTypes"
                     item-text="value"
                     item-value="id"
@@ -216,20 +230,22 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col>
+                <v-col class="py-2">
                   <v-text-field
                     label="Date Created"
                     filled
+                    dense
                     readonly
                     hint="Automatically generated"
                     persistent-hint
                     v-model="materialLog.defaultProperties.dateCreated"
                   ></v-text-field>
                 </v-col>
-                <v-col>
+                <v-col class="py-2">
                   <v-text-field
                     label="Created By"
                     filled
+                    dense
                     readonly
                     hint="Automatically generated"
                     persistent-hint
@@ -245,7 +261,7 @@
             <v-container>
               <template v-if="materialLog.isMagnet === true">
                 <v-row>
-                  <v-col>
+                  <v-col class="pt-0">
                     <v-card
                       elevation="2"
                     >
@@ -352,7 +368,7 @@
               </template>
               <template v-else-if="materialLog.isMagnet === false">
                 <v-row>
-                  <v-col>
+                  <v-col class="pt-0">
                     <v-card
                       elevation="2"
                     >
@@ -447,7 +463,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col>
+        <v-col class="pt-0">
           <v-expansion-panels>
             <v-expansion-panel
               @change="notesExpanded = !notesExpanded"
@@ -521,7 +537,7 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-                <v-simple-table>
+                <v-simple-table dense>
                   <template>
                     <thead>
                       <tr>

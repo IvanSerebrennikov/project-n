@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <HelloWorld/>
+  <div class="pa-6">
+    <h1>This is an home page</h1>
+    <h2>Click <router-link to="/material-logs">Material Logs</router-link> link to see current app functionality</h2>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    
   }
 }
 </script>

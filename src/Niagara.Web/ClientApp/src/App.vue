@@ -75,14 +75,12 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 import SimpleModalDialog from './components/SimpleModalDialog';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
     SimpleModalDialog
   },
 

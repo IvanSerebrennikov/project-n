@@ -210,15 +210,7 @@ export default {
             vm.$router.replace({ name: 'InventoryTicket', params: { lotNumber: vm.lotNumber, ticketId: vm.inventoryTicket.id }});
           })
           .catch(error => {
-            console.log(error);
-            if (error.response) {
-              console.log(error.response.data);
-              console.log(error.response.status);
-            } else if (error.request) {
-              console.log(error.request);
-            } else {
-              console.log('Error', error.message);
-            }
+            vm.$root.$simpleDialog.showAxiosError(error);
           });
       }
 

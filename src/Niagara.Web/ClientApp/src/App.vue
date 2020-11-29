@@ -70,21 +70,27 @@
         </v-row>
       </v-container>
     </v-main>
+    <SimpleModalDialog ref="simpleDialog"></SimpleModalDialog>
   </v-app>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld';
+import SimpleModalDialog from './components/SimpleModalDialog';
 
 export default {
   name: 'App',
 
   components: {
     HelloWorld,
+    SimpleModalDialog
   },
 
   data: () => ({
     //
   }),
+  mounted() {
+    this.$root.$simpleDialog = this.$refs.simpleDialog
+  }
 };
 </script>

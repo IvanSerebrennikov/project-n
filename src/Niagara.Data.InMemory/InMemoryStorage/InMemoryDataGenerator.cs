@@ -274,6 +274,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
                         MCE = Faker.Lorem.Words(1).FirstOrDefault(),
                         QuantityToBeMade = Faker.RandomNumber.Next(5, 19),
                         QuantityIssued = Faker.RandomNumber.Next(20, 50),
+                        Notes = Faker.Lorem.Sentence(5),
                         DateCreated = new DateTime(2020, 11, day),
                         CreatedBy = Faker.Name.FullName()
                     });

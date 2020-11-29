@@ -24,6 +24,11 @@ namespace Niagara.Domain.Services
                 .Select(x => x.ToModel()).ToList();
         }
 
+        public InventoryMaterialTicketModel GetById(int ticketId)
+        {
+            return _repository.GetById(ticketId).ToModel();
+        }
+
         public InventoryMaterialTicketModel Create(InventoryMaterialTicketModel model)
         {
             var entity = new InventoryMaterialTicket();

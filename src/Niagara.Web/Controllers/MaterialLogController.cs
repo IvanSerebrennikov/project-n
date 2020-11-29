@@ -119,8 +119,26 @@ namespace Niagara.Web.Controllers
             return _inventoryMaterialTicketService.GetAllByLotNumber(lotNumber);
         }
 
+        [HttpGet("{lotNumber}/inventoryMaterialTickets/{ticketId}")]
+        public IActionResult GetInventoryMaterialTicket(string lotNumber, int ticketId)
+        {
+            var ticket = _inventoryMaterialTicketService.GetById(ticketId);
+
+            if (ticket == null)
+            {
+                return BadRequest("Inventory Material Ticket was not found.");
+            }
+
+            if (ticket.MaterialLogLotNumber != lotNumber)
+            {
+                return BadRequest("Inventory Material Ticket belongs to another Material Log.");
+            }
+
+            return Ok(ticket);
+        }
+
         [HttpPost("{lotNumber}/inventoryMaterialTickets")]
-        public IActionResult Create(InventoryMaterialTicketModel request)
+        public IActionResult Create(InventoryMaterialTicketModel model)
         {
             
 

@@ -7,6 +7,8 @@ namespace Niagara.Domain.Services.Interfaces
     {
         IReadOnlyList<InventoryMaterialTicketModel> GetAllByLotNumber(string lotNumber);
 
+        InventoryMaterialTicketModel GetById(int ticketId);
+
         InventoryMaterialTicketModel Create(InventoryMaterialTicketModel model);
     }
 }

@@ -5,7 +5,7 @@
         <v-col>
           <v-btn
             color="secondary"
-            @click="goToMaterialTicketsList"
+            @click="goToInventoryTicketsList"
           >
             <v-icon left>
               mdi-card-bulleted-outline
@@ -664,7 +664,7 @@ export default {
     }
   },
   methods: {
-    goToMaterialTicketsList: function() {
+    goToInventoryTicketsList: function() {
       this.$router.push({ name: 'InventoryTicketsList', params: { lotNumber: this.lotNumber }});
     },
     switchEditMode: function() {

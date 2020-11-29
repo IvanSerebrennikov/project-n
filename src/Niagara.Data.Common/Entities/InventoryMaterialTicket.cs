@@ -21,6 +21,8 @@ namespace Niagara.Data.Common.Entities
 
         public int QuantityIssued { get; set; }
 
+        public string Notes { get; set; }
+
         public string CreatedBy { get; set; }
 
         public DateTime DateCreated { get; set; }

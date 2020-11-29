@@ -21,6 +21,7 @@ namespace Niagara.Domain.Mapping
                 MCE = entity.MCE,
                 QuantityToBeMade = entity.QuantityToBeMade,
                 QuantityIssued = entity.QuantityIssued,
+                Notes = entity.Notes,
                 CreatedBy = entity.CreatedBy,
                 DateCreated = entity.DateCreated.ToDateString()
             };
@@ -35,6 +36,7 @@ namespace Niagara.Domain.Mapping
                 entity.InventoryItem = model.InventoryItem;
                 entity.TicketNumber = model.TicketNumber;
                 entity.MCE = model.MCE;
+                entity.Notes = model.Notes;
                 entity.QuantityToBeMade = model.QuantityToBeMade;
                 entity.QuantityIssued = model.QuantityIssued;
             }

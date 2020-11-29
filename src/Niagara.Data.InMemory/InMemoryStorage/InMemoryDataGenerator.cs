@@ -268,7 +268,7 @@ namespace Niagara.Data.InMemory.InMemoryStorage
                     {
                         Id = _inventoryMaterialTicketInMemoryProvider.GenerateEntityId(),
                         MaterialLogId = GetAnyMaterialLogId(_materialLogsInMemoryProvider.Entities),
-                        JobTrackNumber = Faker.RandomNumber.Next(100, 999).ToString(),
+                        JobTrackNumber = $"JT{Faker.RandomNumber.Next(1000, 9999)}",
                         InventoryItem = string.Join(" ", Faker.Lorem.Words(2)),
                         TicketNumber = Faker.RandomNumber.Next(10, 200).ToString(),
                         MCE = Faker.Lorem.Words(1).FirstOrDefault(),

@@ -140,9 +140,9 @@ namespace Niagara.Web.Controllers
         [HttpPost("{lotNumber}/inventoryMaterialTickets")]
         public IActionResult Create(InventoryMaterialTicketModel model)
         {
-            
+            var createdInventoryMaterialTicket = _inventoryMaterialTicketService.Create(model);
 
-            return Ok();
+            return Ok(createdInventoryMaterialTicket);
         }
 
         private int GetPartNumberIdWithCreateNewOneIfNeeded(string partNumberValue)

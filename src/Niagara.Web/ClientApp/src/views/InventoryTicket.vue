@@ -195,7 +195,22 @@ export default {
       this.$router.push({ name: 'InventoryTicketsList', params: { lotNumber: this.lotNumber }});
     },
     saveInventoryTicket: function () {
-      console.log(this.inventoryTicket);
+      var vm = this;
+
+      const isValid = vm.$refs.inventoryTicketForm.validate();
+
+      if (!isValid)
+        return;
+
+      function create() {
+        vm.axios.post(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets`, vm.inventoryTicket).then((response) => {
+          console.log(response);
+          vm.inventoryTicket = response.data;
+          vm.$router.replace({ name: 'InventoryTicket', params: { lotNumber: vm.lotNumber, ticketId: vm.inventoryTicket.id }});
+        });
+      }
+
+      create();
     }
   },
   mounted: function() {

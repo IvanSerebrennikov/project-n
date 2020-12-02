@@ -137,7 +137,6 @@ namespace Niagara.Web
         {
             services.AddScoped<IMaterialLogService, MaterialLogService>();
             services.AddScoped<ISelectableOptionService, SelectableOptionService>();
-            services.AddScoped<IMaterialLogNoteService, MaterialLogNoteService>();
             services.AddScoped<IInventoryMaterialTicketService, InventoryMaterialTicketService>();
         }
 

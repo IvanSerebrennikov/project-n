@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Niagara.Domain.Exceptions;
 using Niagara.Domain.Models;
 using Niagara.Domain.Services.Interfaces;
 using Niagara.Web.Models;
@@ -15,18 +16,15 @@ namespace Niagara.Web.Controllers
     {
         private readonly IMaterialLogService _materialLogService;
         private readonly ISelectableOptionService _selectableOptionService;
-        private readonly IMaterialLogNoteService _materialLogNoteService;
         private readonly IInventoryMaterialTicketService _inventoryMaterialTicketService;
 
         public MaterialLogController(
             IMaterialLogService materialLogService, 
             ISelectableOptionService selectableOptionService,
-            IMaterialLogNoteService materialLogNoteService,
             IInventoryMaterialTicketService inventoryMaterialTicketService)
         {
             _materialLogService = materialLogService;
             _selectableOptionService = selectableOptionService;
-            _materialLogNoteService = materialLogNoteService;
             _inventoryMaterialTicketService = inventoryMaterialTicketService;
         }
 
@@ -77,7 +75,7 @@ namespace Niagara.Web.Controllers
         [HttpGet("{lotNumber}/notes")]
         public IEnumerable<MaterialLogNoteModel> GetNotes(string lotNumber)
         {
-            return _materialLogNoteService.GetAllByLotNumber(lotNumber);
+            return _materialLogService.GetNotes(lotNumber);
         }
 
         [HttpPost]
@@ -85,16 +83,16 @@ namespace Niagara.Web.Controllers
         {
             var materialLogModel = request.MaterialLog;
 
-            materialLogModel.DefaultProperties.PartNumberId =
-                GetPartNumberIdWithCreateNewOneIfNeeded(request.PartNumber);
-            materialLogModel.DefaultProperties.SupplierId =
-                GetSupplierIdWithCreateNewOneIfNeeded(request.Supplier);
+            try
+            {
+                var createdMaterialLogModel = _materialLogService.Create(materialLogModel, request.PartNumber, request.Supplier, request.NewNotes);
 
-            var createdMaterialLogModel = _materialLogService.Create(materialLogModel);
-
-            CreateNotes(createdMaterialLogModel.DefaultProperties.LotNumber, request.NewNotes);
-
-            return Ok(createdMaterialLogModel);
+                return Ok(createdMaterialLogModel);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error during Material Log creating.");
+            }
         }
 
         [HttpPut]
@@ -102,21 +100,21 @@ namespace Niagara.Web.Controllers
         {
             var materialLogModel = request.MaterialLog;
 
-            materialLogModel.DefaultProperties.PartNumberId =
-                GetPartNumberIdWithCreateNewOneIfNeeded(request.PartNumber);
-            materialLogModel.DefaultProperties.SupplierId =
-                GetSupplierIdWithCreateNewOneIfNeeded(request.Supplier);
-
-            var updatedMaterialLogModel = _materialLogService.Update(materialLogModel);
-
-            if (updatedMaterialLogModel == null)
+            try
             {
-                return BadRequest("Material Log was not found.");
+                var updatedMaterialLogModel = _materialLogService.Update(materialLogModel, request.PartNumber,
+                    request.Supplier, request.NewNotes);
+
+                return Ok();
             }
-
-            CreateNotes(updatedMaterialLogModel.DefaultProperties.LotNumber, request.NewNotes);
-
-            return Ok();
+            catch (MaterialLogUpdateException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Error during Material Log updating.");
+            }
         }
 
         [HttpGet("{lotNumber}/inventoryMaterialTickets")]
@@ -146,54 +144,19 @@ namespace Niagara.Web.Controllers
         [HttpPost("{lotNumber}/inventoryMaterialTickets")]
         public IActionResult Create(InventoryMaterialTicketModel model)
         {
-            var materialLogModel = _materialLogService.GetByLotNumber(model.MaterialLogLotNumber);
-
-            if (materialLogModel == null)
+            try
             {
-                return BadRequest("Related Material Log was not found.");
+                var createdInventoryMaterialTicket = _inventoryMaterialTicketService.Create(model);
+
+                return Ok(createdInventoryMaterialTicket);
             }
-
-            if (materialLogModel.DefaultProperties.Quantity < model.QuantityIssued)
+            catch (InventoryMaterialTicketCreateException e)
             {
-                return BadRequest(
-                    $"Related Material Log has only {materialLogModel.DefaultProperties.Quantity} quantity.");
+                return BadRequest(e.Message);
             }
-
-            var createdInventoryMaterialTicket = _inventoryMaterialTicketService.Create(model);
-
-            materialLogModel.DefaultProperties.Quantity -= model.QuantityIssued;
-
-            _materialLogService.Update(materialLogModel);
-
-            return Ok(createdInventoryMaterialTicket);
-        }
-
-        private int GetPartNumberIdWithCreateNewOneIfNeeded(string partNumberValue)
-        {
-            var partNumber =
-                _selectableOptionService.GetPartNumberByValue(partNumberValue) ??
-                _selectableOptionService.CreatePartNumber(partNumberValue);
-
-            return partNumber.Id;
-        }
-
-        private int GetSupplierIdWithCreateNewOneIfNeeded(string supplierValue)
-        {
-            var supplier =
-                _selectableOptionService.GetSupplierByValue(supplierValue) ??
-                _selectableOptionService.CreateSupplier(supplierValue);
-
-            return supplier.Id;
-        }
-
-        private void CreateNotes(string materialLogLotNumber, IReadOnlyList<string> notes)
-        {
-            foreach (var note in notes)
+            catch (Exception e)
             {
-                if (string.IsNullOrWhiteSpace(note))
-                    continue;
-
-                _materialLogNoteService.Create(materialLogLotNumber, note);
+                return BadRequest("Error during Inventory Material Ticket updating.");
             }
         }
     }

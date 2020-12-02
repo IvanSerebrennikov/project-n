@@ -36,58 +36,20 @@ namespace Niagara.Domain.Services
             return _unitOfMeasureRepository.GetAll().Select(x => x.ToModel()).ToList();
         }
 
-
         public IReadOnlyList<SelectableOptionModel> GetPartNumbers()
         {
             return _partNumberRepository.GetAll().Select(x => x.ToModel()).ToList();
         }
-
-        public SelectableOptionModel GetPartNumberByValue(string value)
-        {
-            return _partNumberRepository.GetByValue(value).ToModel();
-        }
-
-        public SelectableOptionModel CreatePartNumber(string value)
-        {
-            var entity = new PartNumber
-            {
-                Value = value
-            };
-
-            _partNumberRepository.Create(entity);
-
-            return entity.ToModel();
-        }
-
 
         public IReadOnlyList<SelectableOptionModel> GetSuppliers()
         {
             return _supplierRepository.GetAll().Select(x => x.ToModel()).ToList();
         }
 
-        public SelectableOptionModel GetSupplierByValue(string value)
-        {
-            return _supplierRepository.GetByValue(value).ToModel();
-        }
-
-        public SelectableOptionModel CreateSupplier(string value)
-        {
-            var entity = new Supplier
-            {
-                Value = value
-            };
-
-            _supplierRepository.Create(entity);
-
-            return entity.ToModel();
-        }
-
-
         public IReadOnlyList<SelectableOptionModel> GetShapes()
         {
             return _shapeRepository.GetAll().Select(x => x.ToModel()).ToList();
         }
-
 
         public IReadOnlyList<SelectableOptionModel> GetMaterialLogTypes()
         {

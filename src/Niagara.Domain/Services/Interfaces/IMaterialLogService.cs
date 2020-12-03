@@ -7,8 +7,6 @@ namespace Niagara.Domain.Services.Interfaces
     {
         MaterialLogModel GetByLotNumber(string lotNumber);
 
-        IReadOnlyList<MaterialLogModel> GetAll();
-
         IReadOnlyList<MaterialLogReducedModel> GetAllReduced(int? skip = null, int? take = null);
 
         int Count();

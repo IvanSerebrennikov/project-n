@@ -34,11 +34,6 @@ namespace Niagara.Domain.Services
             return _materialLogRepository.GetById(lotNumber).ToModel();
         }
 
-        public IReadOnlyList<MaterialLogModel> GetAll()
-        {
-            return _materialLogRepository.GetAll().OrderByDescending(x => x.DateCreated).Select(x => x.ToModel()).ToList();
-        }
-
         public IReadOnlyList<MaterialLogReducedModel> GetAllReduced(int? skip = null, int? take = null)
         {
             return _materialLogRepository.GetAllReduced(skip, take)

@@ -5,11 +5,13 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niagara.Web", "Niagara.Web\Niagara.Web.csproj", "{85379435-84D5-4EAC-ABFA-D96A18704E70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niagara.Data.Common", "Niagara.Data.Common\Niagara.Data.Common.csproj", "{B0B03931-D0A6-425E-A1A4-8FE1CE748D94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niagara.Data.Common", "Niagara.Data.Common\Niagara.Data.Common.csproj", "{B0B03931-D0A6-425E-A1A4-8FE1CE748D94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niagara.Data.InMemory", "Niagara.Data.InMemory\Niagara.Data.InMemory.csproj", "{ED9605A2-8754-4714-853B-82C77BC93CAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niagara.Data.InMemory", "Niagara.Data.InMemory\Niagara.Data.InMemory.csproj", "{ED9605A2-8754-4714-853B-82C77BC93CAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niagara.Domain", "Niagara.Domain\Niagara.Domain.csproj", "{07AB3C1A-15C5-44B7-9566-3E73CE82547E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Niagara.Domain", "Niagara.Domain\Niagara.Domain.csproj", "{07AB3C1A-15C5-44B7-9566-3E73CE82547E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Niagara.Data.Database", "Niagara.Data.Database\Niagara.Data.Database.csproj", "{4F5BC719-D079-4900-B57B-5A5AB8D83EF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{07AB3C1A-15C5-44B7-9566-3E73CE82547E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07AB3C1A-15C5-44B7-9566-3E73CE82547E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07AB3C1A-15C5-44B7-9566-3E73CE82547E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F5BC719-D079-4900-B57B-5A5AB8D83EF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F5BC719-D079-4900-B57B-5A5AB8D83EF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F5BC719-D079-4900-B57B-5A5AB8D83EF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F5BC719-D079-4900-B57B-5A5AB8D83EF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Niagara.Data.Common.RepositoryInterfaces;
+using Niagara.Data.Database.Repositories;
 using Niagara.Data.InMemory.InMemoryStorage;
 using Niagara.Data.InMemory.InMemoryStorage.Providers;
 using Niagara.Data.InMemory.Repositories;
@@ -22,6 +23,8 @@ namespace Niagara.Web
         }
 
         public IConfiguration Configuration { get; }
+
+        private bool UseInMemoryData => Configuration.GetValue<bool>("UseInMemoryData");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,14 +43,21 @@ namespace Niagara.Web
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Niagara Web API", Version = "v1" });
             });
 
-            ConfigureInMemoryDataProviderServices(services);
-            ConfigureInMemoryDataServices(services);
-
+            if (UseInMemoryData)
+            {
+                ConfigureInMemoryDataProviderServices(services);
+                ConfigureInMemoryDataServices(services);
+            }
+            else
+            {
+                ConfigureDatabaseDataServices(services);
+            }
+            
             ConfigureDomainServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, InMemoryDataGenerator inMemoryDataGenerator)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -97,7 +107,11 @@ namespace Niagara.Web
                 }
             });
 
-            inMemoryDataGenerator.Generate();
+            if (UseInMemoryData)
+            {
+                var inMemoryDataGenerator = app.ApplicationServices.GetService<InMemoryDataGenerator>();
+                inMemoryDataGenerator.Generate();
+            }
         }
 
         #region private
@@ -130,7 +144,14 @@ namespace Niagara.Web
 
         private void ConfigureDatabaseDataServices(IServiceCollection services)
         {
-
+            services.AddScoped<IMaterialLogRepository, MaterialLogRepository>();
+            services.AddScoped<IMaterialLogTypeRepository, MaterialLogTypeRepository>();
+            services.AddScoped<IPartNumberRepository, PartNumberRepository>();
+            services.AddScoped<IShapeRepository, ShapeRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+            services.AddScoped<IUnitOfMeasureRepository, UnitOfMeasureRepository>();
+            services.AddScoped<IMaterialLogNoteRepository, MaterialLogNoteRepository>();
+            services.AddScoped<IInventoryMaterialTicketRepository, InventoryMaterialTicketRepository>();
         }
 
         private void ConfigureDomainServices(IServiceCollection services)

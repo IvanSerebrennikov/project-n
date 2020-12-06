@@ -37,224 +37,22 @@
       </v-row>
       <v-row>
         <v-col cols="12" lg="6">
-          <v-form ref="defaultPropertiesForm">
-            <v-container>
-              <v-row>
-                <v-col class="py-0">
-                  <v-text-field
-                    label="Lot #"
-                    outlined
-                    dense
-                    readonly
-                    prepend-icon="mdi-table-key"
-                    hint="Automatically generated"
-                    persistent-hint
-                    v-model="materialLog.defaultProperties.lotNumber"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="py-0">
-                  <v-combobox
-                    v-model="partNumber"
-                    outlined
-                    dense
-                    :items="partNumberOptions"
-                    :search-input.sync="partNumberSearch"
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    label="Part #"
-                    @change="partNumberChanged"
-                  >
-                    <template v-slot:no-data>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            No results matching "<strong>{{ partNumberSearch }}</strong>". Press <kbd>enter</kbd> to create a new one.
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </template>
-                  </v-combobox>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="pb-2 pt-0">
-                  <v-switch
-                    v-model="materialLog.isMagnet"
-                    dense
-                    :readonly="!editMode"
-                    label="Magnet"
-                  ></v-switch>
-                </v-col>
-                <v-col class="pb-2 pt-0">
-                  <v-checkbox
-                    label="Available"
-                    dense
-                    :readonly="!editMode"
-                    v-model="materialLog.defaultProperties.isAvailable"
-                  ></v-checkbox>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="py-2">
-                  <v-combobox
-                    v-model="supplier"
-                    outlined
-                    dense
-                    :items="supplierOptions"
-                    :search-input.sync="supplierSearch"
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    label="Supplier"
-                    @change="supplierChanged"
-                  >
-                    <template v-slot:no-data>
-                      <v-list-item>
-                        <v-list-item-content>
-                          <v-list-item-title>
-                            No results matching "<strong>{{ supplierSearch }}</strong>". Press <kbd>enter</kbd> to create a new one.
-                          </v-list-item-title>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </template>
-                  </v-combobox>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="pb-3 pt-0">
-                  <v-text-field
-                    label="PO #"
-                    outlined
-                    dense
-                    readonly
-                    prepend-icon="mdi-link-variant"
-                    hint="Automatically generated"
-                    persistent-hint
-                    v-model="materialLog.defaultProperties.poNumber"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="pb-3 pt-0">
-                  <v-checkbox
-                    label="DFARS"
-                    dense
-                    :readonly="!editMode"
-                    v-model="materialLog.defaultProperties.isDFARS"
-                  ></v-checkbox>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="py-2">
-                  <v-text-field
-                    label="Description"
-                    outlined
-                    dense
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    v-model="materialLog.defaultProperties.description"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="py-2">
-                  <v-text-field
-                    label="Qty"
-                    type="number"
-                    :readonly="!editMode || !isNew"
-                    outlined
-                    dense
-                    :hint="!isNew ? 'Can\'t be changed' : ''"
-                    persistent-hint
-                    :rules="[validationRules.required]"
-                    v-model="materialLog.defaultProperties.quantity"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="py-2">
-                  <v-text-field
-                    label="Primary Location"
-                    outlined
-                    dense
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    v-model="materialLog.defaultProperties.primaryLocation"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="py-2">
-                  <v-text-field
-                    label="Supplier Material Grade"
-                    outlined
-                    dense
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    v-model="materialLog.defaultProperties.supplierMaterialGrade"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="py-2">
-                  <v-text-field
-                    label="MRT #"
-                    outlined
-                    dense
-                    type="number"
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    v-model="materialLog.defaultProperties.mrtNumber"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="py-2">
-                  <v-select
-                    v-model="materialLog.defaultProperties.unitOfMeasureId"
-                    outlined
-                    dense
-                    :items="selectableOptions.unitOfMeasures"
-                    item-text="value"
-                    item-value="id"
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    label="U/M"
-                  ></v-select>
-                </v-col>
-                <v-col class="py-2">
-                  <v-select
-                    v-model="materialLog.defaultProperties.materialLogTypeId"
-                    outlined
-                    dense
-                    :items="selectableOptions.materialLogTypes"
-                    item-text="value"
-                    item-value="id"
-                    :readonly="!editMode"
-                    :rules="[validationRules.required]"
-                    label="Type"
-                  ></v-select>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="py-2">
-                  <v-text-field
-                    label="Date Created"
-                    filled
-                    dense
-                    readonly
-                    hint="Automatically generated"
-                    persistent-hint
-                    v-model="materialLog.defaultProperties.dateCreated"
-                  ></v-text-field>
-                </v-col>
-                <v-col class="py-2">
-                  <v-text-field
-                    label="Created By"
-                    filled
-                    dense
-                    readonly
-                    hint="Automatically generated"
-                    persistent-hint
-                    v-model="materialLog.defaultProperties.createdBy"
-                  ></v-text-field>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
+          <DefaultPropertiesForm
+            ref="defaultPropertiesForm"
+
+            :defaultProperties="materialLog.defaultProperties"
+            :magnetChecked.sync="materialLog.isMagnet"
+            :partNumberValue.sync="partNumberValue"
+            :supplierValue.sync="supplierValue"
+
+            :editMode="editMode"
+            :isNew="isNew"
+            :validationRules="validationRules"
+            :unitOfMeasures="selectableOptions.unitOfMeasures"
+            :partNumbers="selectableOptions.partNumbers"
+            :suppliers="selectableOptions.suppliers"
+            :materialLogTypes="selectableOptions.materialLogTypes"
+          ></DefaultPropertiesForm>
         </v-col>
         <v-col cols="12" lg="6">
           <v-form>
@@ -514,12 +312,14 @@
 
 <script>
 import MaterialLogNotes from '@/components/materialLog/MaterialLogNotes';
+import DefaultPropertiesForm from '@/components/materialLog/DefaultPropertiesForm';
 
 export default {
   name: 'MaterialLog',
   props: ['lotNumber'],
   components: {
-    MaterialLogNotes
+    MaterialLogNotes,
+    DefaultPropertiesForm
   },
   data: function() {
     return {
@@ -545,13 +345,8 @@ export default {
       notes: [],
       newNotes: [],
 
-      partNumberOptions: [],
-      partNumber: null,
-      partNumberSearch: null,
-
-      supplierOptions: [],
-      supplier: null,
-      supplierSearch: null,
+      partNumberValue: null,
+      supplierValue: null,
 
       validationRules: {
         required: function(value) {
@@ -570,30 +365,6 @@ export default {
     switchEditMode: function() {
       this.editMode = !this.editMode;
       this.$refs.defaultPropertiesForm.resetValidation();
-    },
-    partNumberChanged: function(selectedValue) {
-      if (this.validationRules.required(selectedValue) !== true)
-        return;
-
-      const existingPartNumber = this.partNumberOptions.find(function(partNumber) {
-          return partNumber == selectedValue;
-        });
-
-      if (!existingPartNumber) {
-        this.partNumberOptions.unshift(selectedValue);
-      }
-    },
-    supplierChanged: function(selectedValue) {
-      if (this.validationRules.required(selectedValue) !== true)
-        return;
-      
-      const existingSupplier = this.supplierOptions.find(function(supplier) {
-          return supplier == selectedValue;
-        });
-
-      if (!existingSupplier) {
-        this.supplierOptions.unshift(selectedValue);
-      }
     },
     shapeChanged: function(selectedValue) {
       this.materialLog.dimensions.dim1 = null;
@@ -617,14 +388,13 @@ export default {
 
       const requestData = {
         materialLog: vm.materialLog,
-        partNumber: vm.partNumber,
-        supplier: vm.supplier,
+        partNumber: vm.partNumberValue,
+        supplier: vm.supplierValue,
         newNotes: vm.newNotes
       };
 
       function create() {
         vm.axios.post(`/api/MaterialLog`, requestData).then((response) => {
-          console.log(response);
           vm.materialLog = response.data;
           vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: vm.materialLog.defaultProperties.lotNumber }});
           vm.getNotes();
@@ -635,7 +405,6 @@ export default {
 
       function update() {
         vm.axios.put(`/api/MaterialLog`, requestData).then((response) => {
-          console.log(response);
           vm.getNotes();
         }).catch(error => {
           vm.$root.$simpleDialog.showAxiosError(error);
@@ -664,38 +433,6 @@ export default {
       });
     }
 
-    function initPartNumbersCombobox() {
-      vm.partNumberOptions = vm.selectableOptions.partNumbers.map(function(partNumber) {
-          return partNumber.value;
-        });
-
-        const currentPartNumberObject = vm.selectableOptions.partNumbers.find(function(partNumber) {
-          return partNumber.id == vm.materialLog.defaultProperties.partNumberId;
-        });
-
-        if (currentPartNumberObject) {
-          vm.partNumber = currentPartNumberObject.value;
-        }
-
-        vm.materialLog.defaultProperties.partNumberId = 0;
-    }
-
-    function initSupplierCombobox() {
-      vm.supplierOptions = vm.selectableOptions.suppliers.map(function(supplier) {
-          return supplier.value;
-        });
-
-        const currentSupplierObject = vm.selectableOptions.suppliers.find(function(supplier) {
-          return supplier.id == vm.materialLog.defaultProperties.supplierId;
-        });
-
-        if (currentSupplierObject) {
-          vm.supplier = currentSupplierObject.value;
-        }
-
-        vm.materialLog.defaultProperties.supplierId = 0;
-    }
-
     const promises = [
       getSelectableOptions()
     ];
@@ -707,8 +444,8 @@ export default {
 
     Promise.all(promises)
       .then(function() {
-        initPartNumbersCombobox();
-        initSupplierCombobox();
+        vm.$refs.defaultPropertiesForm.initPartNumbersCombobox();
+        vm.$refs.defaultPropertiesForm.initSupplierCombobox();
 
         if (vm.materialLog.isMagnet === null) {
           vm.materialLog.isMagnet = true;

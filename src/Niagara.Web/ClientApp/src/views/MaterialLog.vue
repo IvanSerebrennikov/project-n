@@ -57,205 +57,19 @@
         <v-col cols="12" lg="6">
           <v-form>
             <v-container>
-              <template v-if="materialLog.isMagnet === true">
-                <v-row>
-                  <v-col class="pt-0">
-                    <v-card
-                      elevation="2"
-                    >
-                      <v-card-title>
-                        Magnetic Properties
-                      </v-card-title>
-                      <v-card-text>
-                        <v-row>
-                          <v-col>
-                            <v-text-field
-                              label="BHmax"
-                              suffix="MGOe"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.magneticProperties.bHmax"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col>
-                            <v-text-field
-                              label="Hci"
-                              suffix="kOe"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.magneticProperties.hci"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col>
-                            <v-text-field
-                              label="Br"
-                              suffix="kG"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.magneticProperties.br"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col>
-                            <v-text-field
-                              label="Hc"
-                              suffix="kOe"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.magneticProperties.hc"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-card
-                      elevation="2"
-                    >
-                      <v-card-title>
-                        Dimensions
-                      </v-card-title>
-                      <v-card-text>
-                        <v-row>
-                          <v-col cols="8">
-                            <v-select
-                              v-model="materialLog.dimensions.shapeId"
-                              :items="selectableOptions.shapes"
-                              item-text="value"
-                              item-value="id"
-                              :readonly="!editMode"
-                              @change="shapeChanged"
-                              label="Shape"
-                            ></v-select>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="Dim1"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.dimensions.dim1"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="Dim2"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.dimensions.dim2"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="DimLm"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.dimensions.dimLm"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </template>
-              <template v-else-if="materialLog.isMagnet === false">
-                <v-row>
-                  <v-col class="pt-0">
-                    <v-card
-                      elevation="2"
-                    >
-                      <v-card-title>
-                        Specifications
-                      </v-card-title>
-                      <v-card-text>
-                        <v-text-field
-                          label="Material Complies to"
-                          :readonly="!editMode"
-                          v-model="materialLog.specifications.materialCompliesTo"
-                        ></v-text-field>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-card
-                      elevation="2"
-                    >
-                      <v-card-text>
-                        <v-row>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="Bars 1"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.bars.bars1"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="FT 1"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.bars.fT1"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="Total FT"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.bars.totalFT"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="Bars 2"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.bars.bars2"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="FT 2"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.bars.fT2"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="Bars 3"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.bars.bars3"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="4">
-                            <v-text-field
-                              label="FT 3"
-                              type="number"
-                              :readonly="!editMode"
-                              v-model="materialLog.bars.fT3"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </template>
+              <MagneticProperties
+                v-if="materialLog.isMagnet === true"
+                :magneticProperties="materialLog.magneticProperties"
+                :dimensions="materialLog.dimensions"
+                :editMode="editMode"
+                :shapes="selectableOptions.shapes"
+              ></MagneticProperties>
+              <NonMagneticProperties
+                v-else-if="materialLog.isMagnet === false"
+                :specifications="materialLog.specifications"
+                :bars="materialLog.bars"
+                :editMode="editMode"
+              ></NonMagneticProperties>
             </v-container>
           </v-form>
         </v-col>
@@ -313,13 +127,17 @@
 <script>
 import MaterialLogNotes from '@/components/materialLog/MaterialLogNotes';
 import DefaultPropertiesForm from '@/components/materialLog/DefaultPropertiesForm';
+import MagneticProperties from '@/components/materialLog/MagneticProperties';
+import NonMagneticProperties from '@/components/materialLog/NonMagneticProperties';
 
 export default {
   name: 'MaterialLog',
   props: ['lotNumber'],
   components: {
     MaterialLogNotes,
-    DefaultPropertiesForm
+    DefaultPropertiesForm,
+    MagneticProperties,
+    NonMagneticProperties
   },
   data: function() {
     return {
@@ -365,11 +183,6 @@ export default {
     switchEditMode: function() {
       this.editMode = !this.editMode;
       this.$refs.defaultPropertiesForm.resetValidation();
-    },
-    shapeChanged: function(selectedValue) {
-      this.materialLog.dimensions.dim1 = null;
-      this.materialLog.dimensions.dim2 = null;
-      this.materialLog.dimensions.dimLm = null;
     },
     getNotes: function() {
       const vm = this;

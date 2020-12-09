@@ -1,5 +1,15 @@
 <template>
   <div>
+    <PrintAllPage
+      id="printAll"
+      class="d-none"
+      :materialLog="materialLog"
+    ></PrintAllPage>
+    <PrintLabelPage
+      id="printLabel"
+      class="d-none"
+      :materialLog="materialLog"
+    ></PrintLabelPage>
     <v-container>
       <v-row v-if="!isNew">
         <v-col>
@@ -18,6 +28,7 @@
             <v-btn
               color="info"
               class="mr-3"
+              @click="printAll"
             >
               <v-icon left>
                 mdi-printer
@@ -26,6 +37,7 @@
             </v-btn>
             <v-btn
               color="info"
+              @click="printLabel"
             >
               <v-icon left>
                 mdi-printer-pos
@@ -129,6 +141,8 @@ import MaterialLogNotes from '@/components/materialLog/MaterialLogNotes';
 import DefaultPropertiesForm from '@/components/materialLog/DefaultPropertiesForm';
 import MagneticProperties from '@/components/materialLog/MagneticProperties';
 import NonMagneticProperties from '@/components/materialLog/NonMagneticProperties';
+import PrintAllPage from '@/components/materialLog/PrintAllPage';
+import PrintLabelPage from '@/components/materialLog/PrintLabelPage';
 
 export default {
   name: 'MaterialLog',
@@ -137,7 +151,9 @@ export default {
     MaterialLogNotes,
     DefaultPropertiesForm,
     MagneticProperties,
-    NonMagneticProperties
+    NonMagneticProperties,
+    PrintAllPage,
+    PrintLabelPage
   },
   data: function() {
     return {
@@ -180,6 +196,12 @@ export default {
     goToInventoryTicketsList: function() {
       this.$router.push({ name: 'InventoryTicketsList', params: { lotNumber: this.lotNumber }});
     },
+    printAll: function() {
+      this.$printElement('printAll');
+    },
+    printLabel: function() {
+      this.$printElement('printLabel');
+    },
     switchEditMode: function() {
       this.editMode = !this.editMode;
       this.$refs.defaultPropertiesForm.resetValidation();
@@ -211,7 +233,7 @@ export default {
           vm.materialLog = response.data;
           vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: vm.materialLog.defaultProperties.lotNumber }});
           vm.getNotes();
-          vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} was created`);
+          vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} has been created`);
         }).catch(error => {
           vm.$root.$simpleDialog.showAxiosError(error);
         });
@@ -220,7 +242,7 @@ export default {
       function update() {
         vm.axios.put(`/api/MaterialLog`, requestData).then((response) => {
           vm.getNotes();
-          vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} was updated`);
+          vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} has been updated`);
         }).catch(error => {
           vm.$root.$simpleDialog.showAxiosError(error);
         });

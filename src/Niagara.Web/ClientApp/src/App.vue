@@ -71,17 +71,20 @@
       </v-container>
     </v-main>
     <SimpleModalDialog ref="simpleDialog"></SimpleModalDialog>
+    <SimpleNotification ref="simpleNotification"></SimpleNotification>
   </v-app>
 </template>
 
 <script>
 import SimpleModalDialog from './components/SimpleModalDialog';
+import SimpleNotification from './components/SimpleNotification';
 
 export default {
   name: 'App',
 
   components: {
-    SimpleModalDialog
+    SimpleModalDialog,
+    SimpleNotification
   },
 
   data: () => ({
@@ -89,6 +92,7 @@ export default {
   }),
   mounted() {
     this.$root.$simpleDialog = this.$refs.simpleDialog
+    this.$root.$simpleNotification = this.$refs.simpleNotification
   }
 };
 </script>

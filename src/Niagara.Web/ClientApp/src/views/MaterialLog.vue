@@ -211,6 +211,7 @@ export default {
           vm.materialLog = response.data;
           vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: vm.materialLog.defaultProperties.lotNumber }});
           vm.getNotes();
+          vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} was created`);
         }).catch(error => {
           vm.$root.$simpleDialog.showAxiosError(error);
         });
@@ -219,6 +220,7 @@ export default {
       function update() {
         vm.axios.put(`/api/MaterialLog`, requestData).then((response) => {
           vm.getNotes();
+          vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} was updated`);
         }).catch(error => {
           vm.$root.$simpleDialog.showAxiosError(error);
         });

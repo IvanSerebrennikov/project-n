@@ -205,9 +205,9 @@ export default {
       function create() {
         vm.axios.post(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets`, vm.inventoryTicket)
           .then((response) => {
-            console.log(response);
             vm.inventoryTicket = response.data;
             vm.$router.replace({ name: 'InventoryTicket', params: { lotNumber: vm.lotNumber, ticketId: vm.inventoryTicket.id }});
+            vm.$root.$simpleNotification.showSuccess(`Inventory Material Ticket ${vm.inventoryTicket.id} was created`);
           })
           .catch(error => {
             vm.$root.$simpleDialog.showAxiosError(error);

@@ -24,30 +24,16 @@
 /**
  * Vuetify Simple Dialog component
  *
- * Insert component where you want to use it:
- * <SimpleModalDialog ref="simpleDialog"></SimpleModalDialog>
- *
  * Call it:
- * this.$refs.simpleDialog.showMessage('Delete', 'Are you sure?', { color: 'red' }).then((isOk) => {})
+ * this.$root.simpleDialog.showMessage('Delete', 'Are you sure?', { color: 'red' }).then((isOk) => {})
  * Or use await:
- * if (await this.$refs.simpleDialog.showMessage('Delete', 'Are you sure?', { color: 'red' })) {
+ * if (await this.$root.simpleDialog.showMessage('Delete', 'Are you sure?', { color: 'red' })) {
  *   // yes
  * }
  * else {
  *   // cancel
  * }
  *
- * Alternatively you can place it in main App component and access it globally via this.$root.$simpleDialog
- * <template>
- *   <v-app>
- *     ...
- *     <SimpleModalDialog ref="simpleDialog"></SimpleModalDialog>
- *   </v-app>
- * </template>
- *
- * mounted() {
- *   this.$root.$simpleDialog = this.$refs.simpleDialog
- * }
  */
 export default {
   name: 'SimpleModalDialog',
@@ -86,7 +72,7 @@ export default {
       this.simpleModalDialog = true;
       this.title = title;
       this.message = message;
-      this.options = Object.assign(this.options, options)
+      this.options = Object.assign(this.options, options);
       return new Promise((resolve, reject) => {
         this.resolve = resolve;
         this.reject = reject;

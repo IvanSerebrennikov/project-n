@@ -263,6 +263,10 @@ export default {
         if (vm.materialLog.isMagnet === null) {
           vm.materialLog.isMagnet = true;
         }
+
+        if (vm.isNew) {
+          vm.editMode = true;
+        }
       });
   },
   computed: {

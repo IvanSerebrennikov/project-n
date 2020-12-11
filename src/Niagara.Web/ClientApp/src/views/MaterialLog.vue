@@ -4,11 +4,16 @@
       id="printAll"
       class="d-none"
       :materialLog="materialLog"
+      :partNumberValue="partNumberValue"
+      :supplierValue="supplierValue"
     ></PrintAllPage>
     <PrintLabelPage
       id="printLabel"
       class="d-none"
       :materialLog="materialLog"
+      :partNumberValue="partNumberValue"
+      :unitOfMeasures="selectableOptions.unitOfMeasures"
+      :materialLogTypes="selectableOptions.materialLogTypes"
     ></PrintLabelPage>
     <v-container>
       <v-row v-if="!isNew">

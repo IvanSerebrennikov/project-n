@@ -6,6 +6,9 @@
       :materialLog="materialLog"
       :partNumberValue="partNumberValue"
       :supplierValue="supplierValue"
+      :unitOfMeasures="selectableOptions.unitOfMeasures"
+      :shapes="selectableOptions.shapes"
+      :materialLogTypes="selectableOptions.materialLogTypes"
     ></PrintAllPage>
     <PrintLabelPage
       id="printLabel"

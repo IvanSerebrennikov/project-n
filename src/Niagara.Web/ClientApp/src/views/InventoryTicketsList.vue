@@ -82,28 +82,29 @@
 </template>
 
 <script>
+import materialLogService from '@/services/api/materialLogService';
+
 export default {
   name: 'InventoryTicketsList',
   props: ['lotNumber'],
-  data: function() {
+  data() {
     return {
       inventoryMaterialTickets: []
     };
   },
   methods: {
-    goBackToMaterialLog: function() {
+    goBackToMaterialLog() {
       this.$router.push({ name: 'MaterialLog', params: { lotNumber: this.lotNumber }});
     },
-    goToInventoryTicketForm: function(ticketId) {
+    goToInventoryTicketForm(ticketId) {
       this.$router.push({ name: 'InventoryTicket', params: { lotNumber: this.lotNumber, ticketId: ticketId }});
     }
   },
-  mounted: function() {
+  async mounted() {
     const vm = this;
 
-    this.axios.get(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets`).then((response) => {
-      this.inventoryMaterialTickets = response.data;
-    });
+    const inventoryMaterialTickets = await materialLogService.getInventoryMaterialTickets(vm.lotNumber);
+    vm.inventoryMaterialTickets = inventoryMaterialTickets;
   }
 }
 </script>

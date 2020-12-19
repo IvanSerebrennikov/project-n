@@ -171,17 +171,19 @@
 </template>
 
 <script>
+import materialLogService from '@/services/api/materialLogService';
+
 export default {
   name: 'InventoryTicket',
   props: ['lotNumber', 'ticketId'],
-  data: function() {
+  data() {
     return {
       inventoryTicket: {
         materialLogLotNumber: null
       },
 
       validationRules: {
-        required: function(value) {
+        required(value) {
           if (value === null || value === undefined || !value.toString().trim()) {
             return 'Required.'
           }
@@ -191,10 +193,10 @@ export default {
     };
   },
   methods: {
-    goBackToInventoryTicketsList: function() {
+    goBackToInventoryTicketsList() {
       this.$router.push({ name: 'InventoryTicketsList', params: { lotNumber: this.lotNumber }});
     },
-    saveInventoryTicket: function () {
+    async saveInventoryTicket() {
       var vm = this;
 
       const isValid = vm.$refs.inventoryTicketForm.validate();
@@ -202,32 +204,31 @@ export default {
       if (!isValid)
         return;
 
-      function create() {
-        vm.axios.post(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets`, vm.inventoryTicket)
-          .then((response) => {
-            vm.inventoryTicket = response.data;
-            vm.$router.replace({ name: 'InventoryTicket', params: { lotNumber: vm.lotNumber, ticketId: vm.inventoryTicket.id }});
-            vm.$root.$simpleNotification.showSuccess(`Inventory Material Ticket ${vm.inventoryTicket.id} has been created`);
-          })
-          .catch(error => {
-            vm.$root.$simpleDialog.showAxiosError(error);
-          });
+      const create = async () => {
+        const result = await materialLogService.createInventoryMaterialTicket(vm.lotNumber, vm.inventoryTicket);
+
+        if (!result.error) {
+          vm.inventoryTicket = result.data;
+          vm.$router.replace({ name: 'InventoryTicket', params: { lotNumber: vm.lotNumber, ticketId: vm.inventoryTicket.id }});
+          vm.$root.$simpleNotification.showSuccess(`Inventory Material Ticket ${vm.inventoryTicket.id} has been created`);
+        } else {
+          vm.$root.$simpleDialog.showError(result.error);
+        }
       }
 
-      create();
+      await create();
     }
   },
-  mounted: function() {
+  async mounted() {
     const vm = this;
 
-    function getInventoryTicket() {
-      return vm.axios.get(`/api/MaterialLog/${vm.lotNumber}/inventoryMaterialTickets/${vm.ticketId}`).then((response) => {
-        vm.inventoryTicket = response.data;
-      });
+    const getInventoryTicket = async () => {
+      const inventoryTicket = await materialLogService.getInventoryMaterialTicket(vm.lotNumber, vm.ticketId);
+      vm.inventoryTicket = inventoryTicket;
     }
 
     if (!vm.isNew) {
-      getInventoryTicket();
+      await getInventoryTicket();
     } else {
       vm.inventoryTicket.materialLogLotNumber = vm.lotNumber;
     }

@@ -125,6 +125,7 @@ import MagneticProperties from '@/components/materialLog/MagneticProperties';
 import NonMagneticProperties from '@/components/materialLog/NonMagneticProperties';
 import PrintAllPage from '@/components/materialLog/PrintAllPage';
 import PrintLabelPage from '@/components/materialLog/PrintLabelPage';
+import materialLogService from '@/services/api/materialLogService';
 
 export default {
   name: 'MaterialLog',
@@ -137,7 +138,7 @@ export default {
     PrintAllPage,
     PrintLabelPage
   },
-  data: function() {
+  data() {
     return {
       materialLogModel: {
         editMode: false,
@@ -170,7 +171,7 @@ export default {
       },
 
       validationRules: {
-        required: function(value) {
+        required(value) {
           if (value === null || value === undefined || !value.toString().trim()) {
             return 'Required.'
           }
@@ -180,32 +181,32 @@ export default {
     }
   },
   methods: {
-    goToInventoryTicketsList: function() {
+    goToInventoryTicketsList() {
       this.$router.push({ name: 'InventoryTicketsList', params: { lotNumber: this.lotNumber }});
     },
-    printAll: function() {
+    printAll() {
       this.$printElement('printAll');
     },
-    printLabel: function() {
+    printLabel() {
       this.$printElement('printLabel');
     },
-    switchEditMode: function() {
+    switchEditMode() {
       const self = this;
       const vm = self.materialLogModel;
 
       vm.editMode = !vm.editMode;
       self.$refs.defaultPropertiesForm.resetValidation();
     },
-    getNotes: function() {
+    async getNotes() {
       const self = this;
       const vm = self.materialLogModel;
 
-      return self.axios.get(`/api/MaterialLog/${self.lotNumber}/notes`).then((response) => {
-        vm.notes = response.data;
-        vm.newNotes = [];
-      });
+      const notes = await materialLogService.getNotes(self.lotNumber);
+
+      vm.notes = notes;
+      vm.newNotes = [];
     },
-    saveMaterialLog: function() {
+    async saveMaterialLog() {
       const self = this;
       const vm = self.materialLogModel;
 
@@ -221,50 +222,52 @@ export default {
         newNotes: vm.newNotes
       };
 
-      function create() {
-        self.axios.post(`/api/MaterialLog`, requestData).then((response) => {
-          vm.materialLog = response.data;
+      const create = async () => {
+        const result = await materialLogService.createMaterialLog(requestData);
+
+        if (!result.error) {
+          vm.materialLog = result.data;
           vm.isNew = false;
           self.$router.replace({ name: 'MaterialLog', params: { lotNumber: vm.materialLog.defaultProperties.lotNumber }});
           self.getNotes();
           self.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} has been created`);
-        }).catch(error => {
-          self.$root.$simpleDialog.showAxiosError(error);
-        });
+        } else {
+          self.$root.$simpleDialog.showError(result.error);
+        }
       }
 
-      function update() {
-        self.axios.put(`/api/MaterialLog`, requestData).then((response) => {
+      const update = async () => {
+        const result = await materialLogService.updateMaterialLog(requestData);
+
+        if (!result.error) {
           self.getNotes();
           self.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} has been updated`);
-        }).catch(error => {
-          self.$root.$simpleDialog.showAxiosError(error);
-        });
+        } else {
+          self.$root.$simpleDialog.showError(result.error);
+        }
       }
 
       if (vm.isNew) {
-        create();
+        await create();
       } else {
-        update();
+        await update();
       }
     }
   },
-  mounted: function() {
+  async mounted() {
     const self = this;
     const vm = self.materialLogModel;
 
     vm.isNew = vm.editMode = self.lotNumber == 'new';
 
-    function getMaterialLog() {
-      return self.axios.get(`/api/MaterialLog/${self.lotNumber}`).then((response) => {
-        vm.materialLog = response.data;
-      });
+    const getMaterialLog = async () => {
+      const materialLog = await materialLogService.getMaterialLog(self.lotNumber);
+      vm.materialLog = materialLog;
     }
 
-    function getSelectableOptions() {
-      return self.axios.get(`/api/MaterialLog/selectableOptions`).then((response) => {
-        vm.selectableOptions = response.data;
-      });
+    const getSelectableOptions = async () => {
+      const selectableOptions = await materialLogService.getSelectableOptions();
+      vm.selectableOptions = selectableOptions;
     }
 
     const promises = [
@@ -276,15 +279,14 @@ export default {
       promises.push(self.getNotes());
     }
 
-    Promise.all(promises)
-      .then(function() {
-        self.$refs.defaultPropertiesForm.initPartNumbersCombobox();
-        self.$refs.defaultPropertiesForm.initSupplierCombobox();
+    await Promise.all(promises);
 
-        if (vm.materialLog.isMagnet === null) {
-          vm.materialLog.isMagnet = true;
-        }
-      });
+    if (vm.materialLog.isMagnet === null) {
+      vm.materialLog.isMagnet = true;
+    }
+
+    self.$refs.defaultPropertiesForm.initPartNumbersCombobox();
+    self.$refs.defaultPropertiesForm.initSupplierCombobox();
   }
 }
 </script>

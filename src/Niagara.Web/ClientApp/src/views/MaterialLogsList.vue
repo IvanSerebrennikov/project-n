@@ -76,9 +76,11 @@
 </template>
 
 <script>
+import materialLogService from '@/services/api/materialLogService';
+
 export default {
   name: 'MaterialLogsList',
-  data: function() {
+  data() {
     return {
       materialLogs: [],
       page: 1,
@@ -86,31 +88,39 @@ export default {
     };
   },
   methods: {
-    goToMaterialLogForm: function(lotNumber) {
+    goToMaterialLogForm(lotNumber) {
       this.$router.push({ name: 'MaterialLog', params: { lotNumber: lotNumber }});
     },
-    getMaterialLogsCount: function() {
-      return this.axios.get(`/api/MaterialLog/count`).then((response) => {
-        return response.data;
-      });
+    async getMaterialLogsCount() {
+      const materialLogsCount = await materialLogService.getMaterialLogsCount();
+      return materialLogsCount;
     },
-    getMaterialLogs: function() {
+    async getMaterialLogs() {
       const vm = this;
 
       const take = 15;
       const skip = (vm.page - 1) * take;
 
-      vm.getMaterialLogsCount().then((materialLogsCount) => {
+      const initPagesCount = async () => {
+        const materialLogsCount = await vm.getMaterialLogsCount();
         vm.pagesCount = Math.ceil(materialLogsCount / take);
-      });
-      
-      return vm.axios.get(`/api/MaterialLog?skip=${skip}&take=${take}`).then((response) => {
-        vm.materialLogs = response.data;
-      });
+      }
+
+      const initMaterialLogs = async () => {
+        const materialLogs = await materialLogService.getMaterialLogs(skip, take);
+        vm.materialLogs = materialLogs;
+      }
+
+      const promises = [
+        initPagesCount(),
+        initMaterialLogs()
+      ];
+
+      await Promise.all(promises);
     }
   },
-  mounted: function() {
-    this.getMaterialLogs();
+  async mounted() {
+    await this.getMaterialLogs();
   }
 }
 </script>

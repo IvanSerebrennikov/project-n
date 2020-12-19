@@ -81,19 +81,6 @@ export default {
     showError(errorMessage) {
       return this.showMessage('Error', errorMessage, { color: 'red', okBtnText: 'Close' });
     },
-    showAxiosError(error) {
-      if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        return this.showError(error.response.data);
-      } else if (error.request) {
-        console.log(error.request);
-        return this.showError('Some error occured during request sending');
-      } else {
-        console.log('Error', error.message);
-        return this.showError('Unexpected error occured');
-      }
-    },
     ok() {
       this.resolve(true);
       this.simpleModalDialog = false;

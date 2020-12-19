@@ -269,18 +269,25 @@
 <script>
   export default {
     props: {
-      materialLog: Object,
-      partNumberValue: String,
-      supplierValue: String,
-      unitOfMeasures: Array,
-      materialLogTypes: Array,
-      shapes: Array
+      materialLogModel: Object
     },
     computed: {
-      unitOfMeasureValue: function() {
-        const vm = this;
+      materialLog() {
+        const vm = this.materialLogModel;
+        return vm.materialLog;
+      },
+      partNumberValue() {
+        const vm = this.materialLogModel;
+        return vm.customSelectableValues.partNumber;
+      },
+      supplierValue() {
+        const vm = this.materialLogModel;
+        return vm.customSelectableValues.supplier;
+      },
+      unitOfMeasureValue() {
+        const vm = this.materialLogModel;
 
-        let selectedUnitOfMeasure = vm.unitOfMeasures.find(function(unitOfMeasure) {
+        let selectedUnitOfMeasure = vm.selectableOptions.unitOfMeasures.find(function(unitOfMeasure) {
           return unitOfMeasure.id == vm.materialLog.defaultProperties.unitOfMeasureId;
         });
 
@@ -289,10 +296,10 @@
 
         return selectedUnitOfMeasure.value;
       },
-      materialLogTypeValue: function() {
-        const vm = this;
+      materialLogTypeValue() {
+        const vm = this.materialLogModel;
 
-        let selectedMaterialLogType = vm.materialLogTypes.find(function(materialLogType) {
+        let selectedMaterialLogType = vm.selectableOptions.materialLogTypes.find(function(materialLogType) {
           return materialLogType.id == vm.materialLog.defaultProperties.materialLogTypeId;
         });
 
@@ -301,10 +308,10 @@
 
         return selectedMaterialLogType.value;
       },
-      shapeValue: function() {
-        const vm = this;
+      shapeValue() {
+        const vm = this.materialLogModel;
 
-        let selectedShape = vm.shapes.find(function(shape) {
+        let selectedShape = vm.selectableOptions.shapes.find(function(shape) {
           return shape.id == vm.materialLog.dimensions.shapeId;
         });
 

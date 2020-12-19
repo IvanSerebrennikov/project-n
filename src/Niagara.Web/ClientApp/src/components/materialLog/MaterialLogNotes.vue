@@ -129,9 +129,7 @@
 export default {
   name: 'MaterialLogNotes',
   props: {
-    notes: Array,
-    newNotes: Array,
-    editMode: Boolean,
+    materialLogModel: Object,
     validationRules: Object
   },
   data() {
@@ -139,6 +137,20 @@ export default {
       notesExpanded: false,
       addNoteDialog: false,
       newNoteText: null
+    }
+  },
+  computed: {
+    notes() {
+      const vm = this.materialLogModel;
+      return vm.notes;
+    },
+    newNotes() {
+      const vm = this.materialLogModel;
+      return vm.newNotes;
+    },
+    editMode() {
+      const vm = this.materialLogModel;
+      return vm.editMode;
     }
   },
   methods: {

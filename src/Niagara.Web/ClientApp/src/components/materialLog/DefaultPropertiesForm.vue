@@ -16,7 +16,7 @@
         </v-col>
         <v-col class="py-0">
           <v-combobox
-            v-model="partNumber"
+            v-model="customSelectableValues.partNumber"
             outlined
             dense
             :items="partNumberOptions"
@@ -41,7 +41,7 @@
       <v-row>
         <v-col class="pb-2 pt-0">
           <v-switch
-            v-model="isMagnet"
+            v-model="materialLogModel.materialLog.isMagnet"
             dense
             :readonly="!editMode"
             label="Magnet"
@@ -59,7 +59,7 @@
       <v-row>
         <v-col class="py-2">
           <v-combobox
-            v-model="supplier"
+            v-model="customSelectableValues.supplier"
             outlined
             dense
             :items="supplierOptions"
@@ -169,7 +169,7 @@
             v-model="defaultProperties.unitOfMeasureId"
             outlined
             dense
-            :items="unitOfMeasures"
+            :items="selectableOptions.unitOfMeasures"
             item-text="value"
             item-value="id"
             :readonly="!editMode"
@@ -182,7 +182,7 @@
             v-model="defaultProperties.materialLogTypeId"
             outlined
             dense
-            :items="materialLogTypes"
+            :items="selectableOptions.materialLogTypes"
             item-text="value"
             item-value="id"
             :readonly="!editMode"
@@ -223,18 +223,8 @@
   export default {
     name: 'DefaultPropertiesForm',
     props: {
-      defaultProperties: Object,
-      magnetChecked: Boolean,
-      partNumberValue: String,
-      supplierValue: String,
-
-      editMode: Boolean,
-      isNew: Boolean,
-      validationRules: Object,
-      unitOfMeasures: Array,
-      partNumbers: Array,
-      suppliers: Array,
-      materialLogTypes: Array
+      materialLogModel: Object,
+      validationRules: Object
     },
     data() {
       return {
@@ -246,33 +236,29 @@
       }
     },
     computed: {
-      isMagnet: {
-        get: function () {
-          return this.magnetChecked;
-        },
-        set: function (value) {
-          this.$emit('update:magnetChecked', value);
-        }
+      defaultProperties() {
+        const vm = this.materialLogModel;
+        return vm.materialLog.defaultProperties;
       },
-      partNumber: {
-        get: function () {
-          return this.partNumberValue;
-        },
-        set: function (value) {
-          this.$emit('update:partNumberValue', value);
-        }
+      selectableOptions() {
+        const vm = this.materialLogModel;
+        return vm.selectableOptions;
       },
-      supplier: {
-        get: function () {
-          return this.supplierValue;
-        },
-        set: function (value) {
-          this.$emit('update:supplierValue', value);
-        }
+      customSelectableValues() {
+        const vm = this.materialLogModel;
+        return vm.customSelectableValues;
+      },
+      editMode() {
+        const vm = this.materialLogModel;
+        return vm.editMode;
+      },
+      isNew() {
+        const vm = this.materialLogModel;
+        return vm.isNew;
       }
     },
     methods: {
-      partNumberChanged: function(selectedValue) {
+      partNumberChanged(selectedValue) {
         if (this.validationRules.required(selectedValue) !== true)
           return;
 
@@ -285,7 +271,7 @@
         }
       },
 
-      supplierChanged: function(selectedValue) {
+      supplierChanged(selectedValue) {
         if (this.validationRules.required(selectedValue) !== true)
           return;
         
@@ -298,47 +284,47 @@
         }
       },
 
-      initPartNumbersCombobox: function() {
-        const vm = this;
+      initPartNumbersCombobox() {
+        const self = this;
 
-        vm.partNumberOptions = vm.partNumbers.map(function(partNumber) {
+        self.partNumberOptions = self.selectableOptions.partNumbers.map(function(partNumber) {
           return partNumber.value;
         });
 
-        const currentPartNumberObject = vm.partNumbers.find(function(partNumber) {
-          return partNumber.id == vm.defaultProperties.partNumberId;
+        const currentPartNumberObject = self.selectableOptions.partNumbers.find(function(partNumber) {
+          return partNumber.id == self.defaultProperties.partNumberId;
         });
 
         if (currentPartNumberObject) {
-          vm.partNumber = currentPartNumberObject.value;
+          self.customSelectableValues.partNumber = currentPartNumberObject.value;
         }
 
-        vm.defaultProperties.partNumberId = 0;
+        self.defaultProperties.partNumberId = 0;
       },
 
-      initSupplierCombobox: function() {
-        const vm = this;
+      initSupplierCombobox() {
+        const self = this;
 
-        vm.supplierOptions = vm.suppliers.map(function(supplier) {
+        self.supplierOptions = self.selectableOptions.suppliers.map(function(supplier) {
           return supplier.value;
         });
 
-        const currentSupplierObject = vm.suppliers.find(function(supplier) {
-          return supplier.id == vm.defaultProperties.supplierId;
+        const currentSupplierObject = self.selectableOptions.suppliers.find(function(supplier) {
+          return supplier.id == self.defaultProperties.supplierId;
         });
 
         if (currentSupplierObject) {
-          vm.supplier = currentSupplierObject.value;
+          self.customSelectableValues.supplier = currentSupplierObject.value;
         }
 
-        vm.defaultProperties.supplierId = 0;
+        self.defaultProperties.supplierId = 0;
       },
 
-      validate: function() {
+      validate() {
         return this.$refs.form.validate();
       },
 
-      resetValidation: function() {
+      resetValidation() {
         return this.$refs.form.resetValidation();
       }
     }

@@ -97,9 +97,21 @@
   export default {
     name: 'NonMagneticProperties',
     props: {
-      specifications: Object,
-      bars: Object,
-      editMode: Boolean
+      materialLogModel: Object
+    },
+    computed: {
+      specifications() {
+        const vm = this.materialLogModel;
+        return vm.materialLog.specifications;
+      },
+      bars() {
+        const vm = this.materialLogModel;
+        return vm.materialLog.bars;
+      },
+      editMode() {
+        const vm = this.materialLogModel;
+        return vm.editMode;
+      }
     }
   }
 </script>

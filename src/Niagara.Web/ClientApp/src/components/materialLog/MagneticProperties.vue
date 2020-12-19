@@ -66,7 +66,7 @@
               <v-col cols="8">
                 <v-select
                   v-model="dimensions.shapeId"
-                  :items="shapes"
+                  :items="selectableOptions.shapes"
                   item-text="value"
                   item-value="id"
                   :readonly="!editMode"
@@ -112,10 +112,25 @@
   export default {
     name: 'MagneticProperties',
     props: {
-      magneticProperties: Object,
-      dimensions: Object,
-      editMode: Boolean,
-      shapes: Array
+      materialLogModel: Object
+    },
+    computed: {
+      magneticProperties() {
+        const vm = this.materialLogModel;
+        return vm.materialLog.magneticProperties;
+      },
+      dimensions() {
+        const vm = this.materialLogModel;
+        return vm.materialLog.dimensions;
+      },
+      selectableOptions() {
+        const vm = this.materialLogModel;
+        return vm.selectableOptions;
+      },
+      editMode() {
+        const vm = this.materialLogModel;
+        return vm.editMode;
+      }
     },
     methods: {
       shapeChanged: function(selectedValue) {

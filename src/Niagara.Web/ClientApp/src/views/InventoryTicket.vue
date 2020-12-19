@@ -210,7 +210,7 @@ export default {
             vm.$root.$simpleNotification.showSuccess(`Inventory Material Ticket ${vm.inventoryTicket.id} has been created`);
           })
           .catch(error => {
-            vm.$root.$simpleDialog.showAxiosError(error);
+            vm.$root.$simpleDialog.showError(error);
           });
       }
 

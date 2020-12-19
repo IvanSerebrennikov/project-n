@@ -4,8 +4,8 @@
       id="printAll"
       class="d-none"
       :materialLog="materialLog"
-      :partNumberValue="partNumberValue"
-      :supplierValue="supplierValue"
+      :partNumberValue="customSelectableValues.partNumberValue"
+      :supplierValue="customSelectableValues.supplierValue"
       :unitOfMeasures="selectableOptions.unitOfMeasures"
       :shapes="selectableOptions.shapes"
       :materialLogTypes="selectableOptions.materialLogTypes"
@@ -14,12 +14,12 @@
       id="printLabel"
       class="d-none"
       :materialLog="materialLog"
-      :partNumberValue="partNumberValue"
+      :partNumberValue="customSelectableValues.partNumberValue"
       :unitOfMeasures="selectableOptions.unitOfMeasures"
       :materialLogTypes="selectableOptions.materialLogTypes"
     ></PrintLabelPage>
     <v-container>
-      <v-row v-if="!isNew">
+      <v-row v-if="!formProperties.isNew">
         <v-col>
           <v-btn
             color="secondary"
@@ -62,11 +62,11 @@
 
             :defaultProperties="materialLog.defaultProperties"
             :magnetChecked.sync="materialLog.isMagnet"
-            :partNumberValue.sync="partNumberValue"
-            :supplierValue.sync="supplierValue"
+            :partNumberValue.sync="customSelectableValues.partNumberValue"
+            :supplierValue.sync="customSelectableValues.supplierValue"
 
-            :editMode="editMode"
-            :isNew="isNew"
+            :editMode="formProperties.editMode"
+            :isNew="formProperties.isNew"
             :validationRules="validationRules"
             :unitOfMeasures="selectableOptions.unitOfMeasures"
             :partNumbers="selectableOptions.partNumbers"
@@ -81,14 +81,14 @@
                 v-if="materialLog.isMagnet === true"
                 :magneticProperties="materialLog.magneticProperties"
                 :dimensions="materialLog.dimensions"
-                :editMode="editMode"
+                :editMode="formProperties.editMode"
                 :shapes="selectableOptions.shapes"
               ></MagneticProperties>
               <NonMagneticProperties
                 v-else-if="materialLog.isMagnet === false"
                 :specifications="materialLog.specifications"
                 :bars="materialLog.bars"
-                :editMode="editMode"
+                :editMode="formProperties.editMode"
               ></NonMagneticProperties>
             </v-container>
           </v-form>
@@ -99,7 +99,7 @@
           <MaterialLogNotes
             :notes="notes"
             :newNotes="newNotes"
-            :editMode="editMode"
+            :editMode="formProperties.editMode"
             :validationRules="validationRules"
           ></MaterialLogNotes>
         </v-col>
@@ -109,7 +109,7 @@
           <v-btn
             class="mr-6"
             color="primary"
-            v-show="!editMode"
+            v-show="!formProperties.editMode"
             @click="switchEditMode"
           >
             <v-icon left>
@@ -120,7 +120,7 @@
           <v-btn
             class="mr-6"
             color="primary"
-            v-show="editMode"
+            v-show="formProperties.editMode"
             @click="switchEditMode"
           >
             <v-icon left>
@@ -130,7 +130,7 @@
           </v-btn>
           <v-btn
             color="success"
-            v-show="editMode"
+            v-show="formProperties.editMode"
             @click="saveMaterialLog"
           >
             <v-icon left>
@@ -151,6 +151,7 @@ import MagneticProperties from '@/components/materialLog/MagneticProperties';
 import NonMagneticProperties from '@/components/materialLog/NonMagneticProperties';
 import PrintAllPage from '@/components/materialLog/PrintAllPage';
 import PrintLabelPage from '@/components/materialLog/PrintLabelPage';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'MaterialLog',
@@ -163,35 +164,10 @@ export default {
     PrintAllPage,
     PrintLabelPage
   },
-  data: function() {
+  data() {
     return {
-      editMode: false,
-
-      materialLog: {
-        defaultProperties: {},
-        isMagnet: null,
-        magneticProperties: {},
-        dimensions: {},
-        specifications: {},
-        bars: {}
-      },
-
-      selectableOptions: {
-        unitOfMeasures: [],
-        partNumbers: [],
-        suppliers: [],
-        shapes: [],
-        materialLogTypes: []
-      },
-
-      notes: [],
-      newNotes: [],
-
-      partNumberValue: null,
-      supplierValue: null,
-
       validationRules: {
-        required: function(value) {
+        required(value) {
           if (value === null || value === undefined || !value.toString().trim()) {
             return 'Required.'
           }
@@ -200,28 +176,37 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      materialLog: state => state.materialLogModule.materialLog,
+      selectableOptions: state => state.materialLogModule.selectableOptions,
+      customSelectableValues: state => state.materialLogModule.customSelectableValues,
+      notes: state => state.materialLogModule.notes,
+      newNotes: state => state.materialLogModule.newNotes, // needed only in MaterialLogNotes component, will be removed from there later
+      formProperties: state => state.materialLogModule.formProperties
+    })
+  },
   methods: {
-    goToInventoryTicketsList: function() {
+    ...mapActions('materialLogModule', [
+      'resetMaterialLogState',
+      'initMaterialLog',
+      'createMaterialLog',
+      'updateMaterialLog'
+    ]),
+    goToInventoryTicketsList() {
       this.$router.push({ name: 'InventoryTicketsList', params: { lotNumber: this.lotNumber }});
     },
-    printAll: function() {
+    printAll() {
       this.$printElement('printAll');
     },
-    printLabel: function() {
+    printLabel() {
       this.$printElement('printLabel');
     },
-    switchEditMode: function() {
-      this.editMode = !this.editMode;
+    switchEditMode() {
+      this.formProperties.editMode = !this.formProperties.editMode;
       this.$refs.defaultPropertiesForm.resetValidation();
     },
-    getNotes: function() {
-      const vm = this;
-      return vm.axios.get(`/api/MaterialLog/${vm.lotNumber}/notes`).then((response) => {
-        vm.notes = response.data;
-        vm.newNotes = [];
-      });
-    },
-    saveMaterialLog: function() {
+    async saveMaterialLog() {
       var vm = this;
 
       const isValid = vm.$refs.defaultPropertiesForm.validate();
@@ -229,82 +214,46 @@ export default {
       if (!isValid)
         return;
 
-      const requestData = {
-        materialLog: vm.materialLog,
-        partNumber: vm.partNumberValue,
-        supplier: vm.supplierValue,
-        newNotes: vm.newNotes
-      };
+      const create = async () => {
+        const result = await vm.createMaterialLog();
 
-      function create() {
-        vm.axios.post(`/api/MaterialLog`, requestData).then((response) => {
-          vm.materialLog = response.data;
+        if (!result.error) {
           vm.$router.replace({ name: 'MaterialLog', params: { lotNumber: vm.materialLog.defaultProperties.lotNumber }});
-          vm.getNotes();
           vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} has been created`);
-        }).catch(error => {
-          vm.$root.$simpleDialog.showAxiosError(error);
-        });
+        } else {
+          vm.$root.$simpleDialog.showError(error);
+        }
       }
 
-      function update() {
-        vm.axios.put(`/api/MaterialLog`, requestData).then((response) => {
-          vm.getNotes();
+      const update = async () => {
+        const result = await vm.updateMaterialLog();
+
+        if (!result.error) {
           vm.$root.$simpleNotification.showSuccess(`Material Log ${vm.materialLog.defaultProperties.lotNumber} has been updated`);
-        }).catch(error => {
-          vm.$root.$simpleDialog.showAxiosError(error);
-        });
+        } else {
+          vm.$root.$simpleDialog.showError(error);
+        }
       }
 
-      if (vm.materialLog.defaultProperties.lotNumber) {
-        update();
+      if (!vm.formProperties.isNew) {
+        await update();
       } else {
-        create();
+        await create();
       }
     }
   },
-  mounted: function() {
+  async mounted() {
     const vm = this;
 
-    function getMaterialLog() {
-      return vm.axios.get(`/api/MaterialLog/${vm.lotNumber}`).then((response) => {
-        vm.materialLog = response.data;
-      });
-    }
+    vm.formProperties.isNew = vm.formProperties.editMode = vm.lotNumber == 'new';
 
-    function getSelectableOptions() {
-      return vm.axios.get(`/api/MaterialLog/selectableOptions`).then((response) => {
-        vm.selectableOptions = response.data;
-      });
-    }
+    await vm.initMaterialLog(vm.lotNumber);
 
-    const promises = [
-      getSelectableOptions()
-    ];
-
-    if (!vm.isNew) {
-      promises.push(getMaterialLog());
-      promises.push(vm.getNotes());
-    }
-
-    Promise.all(promises)
-      .then(function() {
-        vm.$refs.defaultPropertiesForm.initPartNumbersCombobox();
-        vm.$refs.defaultPropertiesForm.initSupplierCombobox();
-
-        if (vm.materialLog.isMagnet === null) {
-          vm.materialLog.isMagnet = true;
-        }
-
-        if (vm.isNew) {
-          vm.editMode = true;
-        }
-      });
+    vm.$refs.defaultPropertiesForm.initPartNumbersCombobox();
+    vm.$refs.defaultPropertiesForm.initSupplierCombobox();
   },
-  computed: {
-    isNew: function() {
-      return this.lotNumber == 'new';
-    }
+  destroyed() {
+    this.resetMaterialLogState();
   }
 }
 </script>

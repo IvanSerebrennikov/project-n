@@ -94,24 +94,24 @@
 </template>
 
 <script>
-  export default {
-    name: 'NonMagneticProperties',
-    props: {
-      materialLogModel: Object
+export default {
+  name: 'NonMagneticProperties',
+  props: {
+    materialLogModel: Object
+  },
+  computed: {
+    specifications() {
+      const vm = this.materialLogModel;
+      return vm.materialLog.specifications;
     },
-    computed: {
-      specifications() {
-        const vm = this.materialLogModel;
-        return vm.materialLog.specifications;
-      },
-      bars() {
-        const vm = this.materialLogModel;
-        return vm.materialLog.bars;
-      },
-      editMode() {
-        const vm = this.materialLogModel;
-        return vm.editMode;
-      }
+    bars() {
+      const vm = this.materialLogModel;
+      return vm.materialLog.bars;
+    },
+    editMode() {
+      const vm = this.materialLogModel;
+      return vm.editMode;
     }
   }
+}
 </script>

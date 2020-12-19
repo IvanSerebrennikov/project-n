@@ -126,11 +126,12 @@
 </template>
 
 <script>
+import validationRules from '@/services/validation/validationRules';
+
 export default {
   name: 'MaterialLogNotes',
   props: {
-    materialLogModel: Object,
-    validationRules: Object
+    materialLogModel: Object
   },
   data() {
     return {
@@ -151,6 +152,9 @@ export default {
     editMode() {
       const vm = this.materialLogModel;
       return vm.editMode;
+    },
+    validationRules() {
+      return validationRules;
     }
   },
   methods: {

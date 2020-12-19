@@ -220,113 +220,117 @@
 </template>
 
 <script>
-  export default {
-    name: 'DefaultPropertiesForm',
-    props: {
-      materialLogModel: Object,
-      validationRules: Object
-    },
-    data() {
-      return {
-        partNumberOptions: [],
-        partNumberSearch: null,
+import validationRules from '@/services/validation/validationRules';
 
-        supplierOptions: [],
-        supplierSearch: null,
+export default {
+  name: 'DefaultPropertiesForm',
+  props: {
+    materialLogModel: Object
+  },
+  data() {
+    return {
+      partNumberOptions: [],
+      partNumberSearch: null,
+
+      supplierOptions: [],
+      supplierSearch: null,
+    }
+  },
+  computed: {
+    defaultProperties() {
+      const vm = this.materialLogModel;
+      return vm.materialLog.defaultProperties;
+    },
+    selectableOptions() {
+      const vm = this.materialLogModel;
+      return vm.selectableOptions;
+    },
+    customSelectableValues() {
+      const vm = this.materialLogModel;
+      return vm.customSelectableValues;
+    },
+    editMode() {
+      const vm = this.materialLogModel;
+      return vm.editMode;
+    },
+    isNew() {
+      const vm = this.materialLogModel;
+      return vm.isNew;
+    },
+    validationRules() {
+      return validationRules;
+    }
+  },
+  methods: {
+    partNumberChanged(selectedValue) {
+      if (this.validationRules.required(selectedValue) !== true)
+        return;
+
+      const existingPartNumber = this.partNumberOptions.find(function(partNumber) {
+        return partNumber == selectedValue;
+      });
+
+      if (!existingPartNumber) {
+        this.partNumberOptions.unshift(selectedValue);
       }
     },
-    computed: {
-      defaultProperties() {
-        const vm = this.materialLogModel;
-        return vm.materialLog.defaultProperties;
-      },
-      selectableOptions() {
-        const vm = this.materialLogModel;
-        return vm.selectableOptions;
-      },
-      customSelectableValues() {
-        const vm = this.materialLogModel;
-        return vm.customSelectableValues;
-      },
-      editMode() {
-        const vm = this.materialLogModel;
-        return vm.editMode;
-      },
-      isNew() {
-        const vm = this.materialLogModel;
-        return vm.isNew;
+
+    supplierChanged(selectedValue) {
+      if (this.validationRules.required(selectedValue) !== true)
+        return;
+      
+      const existingSupplier = this.supplierOptions.find(function(supplier) {
+        return supplier == selectedValue;
+      });
+
+      if (!existingSupplier) {
+        this.supplierOptions.unshift(selectedValue);
       }
     },
-    methods: {
-      partNumberChanged(selectedValue) {
-        if (this.validationRules.required(selectedValue) !== true)
-          return;
 
-        const existingPartNumber = this.partNumberOptions.find(function(partNumber) {
-          return partNumber == selectedValue;
-        });
+    initPartNumbersCombobox() {
+      const self = this;
 
-        if (!existingPartNumber) {
-          this.partNumberOptions.unshift(selectedValue);
-        }
-      },
+      self.partNumberOptions = self.selectableOptions.partNumbers.map(function(partNumber) {
+        return partNumber.value;
+      });
 
-      supplierChanged(selectedValue) {
-        if (this.validationRules.required(selectedValue) !== true)
-          return;
-        
-        const existingSupplier = this.supplierOptions.find(function(supplier) {
-          return supplier == selectedValue;
-        });
+      const currentPartNumberObject = self.selectableOptions.partNumbers.find(function(partNumber) {
+        return partNumber.id == self.defaultProperties.partNumberId;
+      });
 
-        if (!existingSupplier) {
-          this.supplierOptions.unshift(selectedValue);
-        }
-      },
-
-      initPartNumbersCombobox() {
-        const self = this;
-
-        self.partNumberOptions = self.selectableOptions.partNumbers.map(function(partNumber) {
-          return partNumber.value;
-        });
-
-        const currentPartNumberObject = self.selectableOptions.partNumbers.find(function(partNumber) {
-          return partNumber.id == self.defaultProperties.partNumberId;
-        });
-
-        if (currentPartNumberObject) {
-          self.customSelectableValues.partNumber = currentPartNumberObject.value;
-        }
-
-        self.defaultProperties.partNumberId = 0;
-      },
-
-      initSupplierCombobox() {
-        const self = this;
-
-        self.supplierOptions = self.selectableOptions.suppliers.map(function(supplier) {
-          return supplier.value;
-        });
-
-        const currentSupplierObject = self.selectableOptions.suppliers.find(function(supplier) {
-          return supplier.id == self.defaultProperties.supplierId;
-        });
-
-        if (currentSupplierObject) {
-          self.customSelectableValues.supplier = currentSupplierObject.value;
-        }
-
-        self.defaultProperties.supplierId = 0;
-      },
-
-      validate() {
-        return this.$refs.form.validate();
-      },
-
-      resetValidation() {
-        return this.$refs.form.resetValidation();
+      if (currentPartNumberObject) {
+        self.customSelectableValues.partNumber = currentPartNumberObject.value;
       }
+
+      self.defaultProperties.partNumberId = 0;
+    },
+
+    initSupplierCombobox() {
+      const self = this;
+
+      self.supplierOptions = self.selectableOptions.suppliers.map(function(supplier) {
+        return supplier.value;
+      });
+
+      const currentSupplierObject = self.selectableOptions.suppliers.find(function(supplier) {
+        return supplier.id == self.defaultProperties.supplierId;
+      });
+
+      if (currentSupplierObject) {
+        self.customSelectableValues.supplier = currentSupplierObject.value;
+      }
+
+      self.defaultProperties.supplierId = 0;
+    },
+
+    validate() {
+      return this.$refs.form.validate();
+    },
+
+    resetValidation() {
+      return this.$refs.form.resetValidation();
     }
   }
+}
 </script>

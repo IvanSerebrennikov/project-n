@@ -52,7 +52,6 @@
           <DefaultPropertiesForm
             ref="defaultPropertiesForm"
             :materialLogModel="materialLogModel"
-            :validationRules="validationRules"
           ></DefaultPropertiesForm>
         </v-col>
         <v-col cols="12" lg="6">
@@ -74,7 +73,6 @@
         <v-col class="pt-0">
           <MaterialLogNotes
             :materialLogModel="materialLogModel"
-            :validationRules="validationRules"
           ></MaterialLogNotes>
         </v-col>
       </v-row>
@@ -168,15 +166,6 @@ export default {
 
         notes: [],
         newNotes: [],
-      },
-
-      validationRules: {
-        required(value) {
-          if (value === null || value === undefined || !value.toString().trim()) {
-            return 'Required.'
-          }
-          return true;
-        }
       }
     }
   },

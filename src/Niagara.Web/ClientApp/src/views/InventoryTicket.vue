@@ -172,6 +172,7 @@
 
 <script>
 import materialLogService from '@/services/api/materialLogService';
+import validationRules from '@/services/validation/validationRules';
 
 export default {
   name: 'InventoryTicket',
@@ -180,15 +181,6 @@ export default {
     return {
       inventoryTicket: {
         materialLogLotNumber: null
-      },
-
-      validationRules: {
-        required(value) {
-          if (value === null || value === undefined || !value.toString().trim()) {
-            return 'Required.'
-          }
-          return true;
-        }
       }
     };
   },
@@ -236,6 +228,9 @@ export default {
   computed: {
     isNew: function() {
       return this.ticketId == 'new';
+    },
+    validationRules: function() {
+      return validationRules;
     }
   }
 }

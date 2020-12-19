@@ -109,35 +109,35 @@
 </template>
 
 <script>
-  export default {
-    name: 'MagneticProperties',
-    props: {
-      materialLogModel: Object
+export default {
+  name: 'MagneticProperties',
+  props: {
+    materialLogModel: Object
+  },
+  computed: {
+    magneticProperties() {
+      const vm = this.materialLogModel;
+      return vm.materialLog.magneticProperties;
     },
-    computed: {
-      magneticProperties() {
-        const vm = this.materialLogModel;
-        return vm.materialLog.magneticProperties;
-      },
-      dimensions() {
-        const vm = this.materialLogModel;
-        return vm.materialLog.dimensions;
-      },
-      selectableOptions() {
-        const vm = this.materialLogModel;
-        return vm.selectableOptions;
-      },
-      editMode() {
-        const vm = this.materialLogModel;
-        return vm.editMode;
-      }
+    dimensions() {
+      const vm = this.materialLogModel;
+      return vm.materialLog.dimensions;
     },
-    methods: {
-      shapeChanged: function(selectedValue) {
-        this.dimensions.dim1 = null;
-        this.dimensions.dim2 = null;
-        this.dimensions.dimLm = null;
-      }
+    selectableOptions() {
+      const vm = this.materialLogModel;
+      return vm.selectableOptions;
+    },
+    editMode() {
+      const vm = this.materialLogModel;
+      return vm.editMode;
+    }
+  },
+  methods: {
+    shapeChanged: function(selectedValue) {
+      this.dimensions.dim1 = null;
+      this.dimensions.dim2 = null;
+      this.dimensions.dimLm = null;
     }
   }
+}
 </script>

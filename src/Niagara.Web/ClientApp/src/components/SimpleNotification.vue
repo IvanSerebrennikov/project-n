@@ -24,29 +24,29 @@
 </template>
 
 <script>
-  export default {
-    name: 'SimpleNotification',
-    data: () => ({
-      showSimpleNotification: false,
-      message: null,
-      options: {
-        timeout: 4000,
-        color: null,
-        bottom: false,
-        left: false,
-        top: true,
-        right: true,
-        width: 300
-      }
-    }),
-    methods: {
-      showSuccess(message, options) {
-        this.showSimpleNotification = true;
-        this.message = message;
-        options = options || {};
-        options.color = 'success';
-        this.options = Object.assign(this.options, options);
-      }
+export default {
+  name: 'SimpleNotification',
+  data: () => ({
+    showSimpleNotification: false,
+    message: null,
+    options: {
+      timeout: 4000,
+      color: null,
+      bottom: false,
+      left: false,
+      top: true,
+      right: true,
+      width: 300
+    }
+  }),
+  methods: {
+    showSuccess(message, options) {
+      this.showSimpleNotification = true;
+      this.message = message;
+      options = options || {};
+      options.color = 'success';
+      this.options = Object.assign(this.options, options);
     }
   }
+}
 </script>

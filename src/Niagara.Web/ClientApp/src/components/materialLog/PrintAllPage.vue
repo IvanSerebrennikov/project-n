@@ -267,59 +267,59 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      materialLogModel: Object
+export default {
+  props: {
+    materialLogModel: Object
+  },
+  computed: {
+    materialLog() {
+      const vm = this.materialLogModel;
+      return vm.materialLog;
     },
-    computed: {
-      materialLog() {
-        const vm = this.materialLogModel;
-        return vm.materialLog;
-      },
-      partNumberValue() {
-        const vm = this.materialLogModel;
-        return vm.customSelectableValues.partNumber;
-      },
-      supplierValue() {
-        const vm = this.materialLogModel;
-        return vm.customSelectableValues.supplier;
-      },
-      unitOfMeasureValue() {
-        const vm = this.materialLogModel;
+    partNumberValue() {
+      const vm = this.materialLogModel;
+      return vm.customSelectableValues.partNumber;
+    },
+    supplierValue() {
+      const vm = this.materialLogModel;
+      return vm.customSelectableValues.supplier;
+    },
+    unitOfMeasureValue() {
+      const vm = this.materialLogModel;
 
-        let selectedUnitOfMeasure = vm.selectableOptions.unitOfMeasures.find(function(unitOfMeasure) {
-          return unitOfMeasure.id == vm.materialLog.defaultProperties.unitOfMeasureId;
-        });
+      let selectedUnitOfMeasure = vm.selectableOptions.unitOfMeasures.find(function(unitOfMeasure) {
+        return unitOfMeasure.id == vm.materialLog.defaultProperties.unitOfMeasureId;
+      });
 
-        if (!selectedUnitOfMeasure)
-          return "";
+      if (!selectedUnitOfMeasure)
+        return "";
 
-        return selectedUnitOfMeasure.value;
-      },
-      materialLogTypeValue() {
-        const vm = this.materialLogModel;
+      return selectedUnitOfMeasure.value;
+    },
+    materialLogTypeValue() {
+      const vm = this.materialLogModel;
 
-        let selectedMaterialLogType = vm.selectableOptions.materialLogTypes.find(function(materialLogType) {
-          return materialLogType.id == vm.materialLog.defaultProperties.materialLogTypeId;
-        });
+      let selectedMaterialLogType = vm.selectableOptions.materialLogTypes.find(function(materialLogType) {
+        return materialLogType.id == vm.materialLog.defaultProperties.materialLogTypeId;
+      });
 
-        if (!selectedMaterialLogType)
-          return "";
+      if (!selectedMaterialLogType)
+        return "";
 
-        return selectedMaterialLogType.value;
-      },
-      shapeValue() {
-        const vm = this.materialLogModel;
+      return selectedMaterialLogType.value;
+    },
+    shapeValue() {
+      const vm = this.materialLogModel;
 
-        let selectedShape = vm.selectableOptions.shapes.find(function(shape) {
-          return shape.id == vm.materialLog.dimensions.shapeId;
-        });
+      let selectedShape = vm.selectableOptions.shapes.find(function(shape) {
+        return shape.id == vm.materialLog.dimensions.shapeId;
+      });
 
-        if (!selectedShape)
-          return "";
+      if (!selectedShape)
+        return "";
 
-        return selectedShape.value;
-      }
+      return selectedShape.value;
     }
   }
+}
 </script>

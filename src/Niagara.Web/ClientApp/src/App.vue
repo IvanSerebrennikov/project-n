@@ -5,9 +5,12 @@
       color="white"
       flat
     >
-      <v-container class="py-0 fill-height">
-        <v-btn>
-          <router-link to="/">Home</router-link>
+      <v-container :style="{ maxWidth: maxContainerWidth }" class="py-0 fill-height">
+        <v-btn
+          depressed
+          @click="goTo('Home')"
+        >
+          Home
         </v-btn>
 
         <v-spacer></v-spacer>
@@ -16,39 +19,36 @@
     </v-app-bar>
 
     <v-main class="grey lighten-3">
-      <v-container>
+      <v-container :style="{ maxWidth: maxContainerWidth }">
         <v-row>
-          <v-col cols="2">
+          <v-col cols="12" xl="2" lg="2" md="2" sm="3">
             <v-sheet rounded="lg">
               <v-list color="transparent">
-                <v-list-item>
+                <v-list-item link @click="goTo('Home')">
                   <v-list-item-content>
                     <v-list-item-title>
-                      <router-link to="/">Home</router-link>
+                      Home
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item link @click="goTo('About')">
                   <v-list-item-content>
                     <v-list-item-title>
-                      <router-link to="/about">About</router-link>
+                      About
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item link @click="goTo('MaterialLogsList')">
                   <v-list-item-content>
                     <v-list-item-title>
-                      <router-link to="/material-logs">Material Logs</router-link>
+                      Material Logs
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
 
                 <v-divider class="my-2"></v-divider>
 
-                <v-list-item
-                  link
-                  color="grey lighten-4"
-                >
+                <v-list-item link>
                   <v-list-item-content>
                     <v-list-item-title>
                       ...
@@ -59,7 +59,7 @@
             </v-sheet>
           </v-col>
 
-          <v-col>
+          <v-col cols="12" xl="10" lg="10" md="10" sm="9">
             <v-sheet
               min-height="70vh"
               rounded="lg"
@@ -90,6 +90,19 @@ export default {
   data: () => ({
     //
   }),
+  methods: {
+    goTo(routeName) {
+      if (this.$route.name == routeName)
+        return;
+
+      this.$router.push({ name: routeName });
+    }
+  },
+  computed: {
+    maxContainerWidth() {
+      return this.$vuetify.breakpoint.thresholds.lg + 'px';
+    }
+  },
   mounted() {
     this.$root.$simpleDialog = this.$refs.simpleDialog
     this.$root.$simpleNotification = this.$refs.simpleNotification
